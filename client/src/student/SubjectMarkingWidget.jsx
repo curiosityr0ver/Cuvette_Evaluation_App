@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const SubjectMarkingWidget = ({ subjectName, results, setResults }) => {
+const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 	const [marks, setMarks] = useState(new Array(10).fill(null));
 
 	const toggleMark = (index) => {
@@ -65,43 +65,47 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults }) => {
 							backgroundColor:
 								mark === null ? "transparent" : mark === true ? "green" : "red",
 						}}
-						onClick={() => toggleMark(index)}
+						onClick={auth ? () => toggleMark(index) : null}
 					>
 						{index + 1}
 					</div>
 				))}
-				<div
-					style={{
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						width: "25px",
-						height: "25px",
-						borderRadius: "50%",
-						border: "1px solid #000",
-						margin: "5px",
-						backgroundColor: "gray",
-					}}
-					onClick={() => addQuestion()}
-				>
-					+
-				</div>
-				<div
-					style={{
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						width: "25px",
-						height: "25px",
-						borderRadius: "50%",
-						border: "1px solid #000",
-						margin: "5px",
-						backgroundColor: "gray",
-					}}
-					onClick={() => removeQuestion()}
-				>
-					-
-				</div>
+				{auth && (
+					<>
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								width: "25px",
+								height: "25px",
+								borderRadius: "50%",
+								border: "1px solid #000",
+								margin: "5px",
+								backgroundColor: "gray",
+							}}
+							onClick={() => addQuestion()}
+						>
+							+
+						</div>
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								width: "25px",
+								height: "25px",
+								borderRadius: "50%",
+								border: "1px solid #000",
+								margin: "5px",
+								backgroundColor: "gray",
+							}}
+							onClick={() => removeQuestion()}
+						>
+							-
+						</div>
+					</>
+				)}
 			</div>
 		</div>
 	);

@@ -4,8 +4,9 @@ import SubjectMarkingWidget from "./SubjectMarkingWidget";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-const AddStudent = ({ auth }) => {
+const AddStudent = ({ auth, students }) => {
 	const [page, setPage] = useState();
+	const [currStudent, setCurrStudent] = useState();
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
@@ -52,13 +53,16 @@ const AddStudent = ({ auth }) => {
 	};
 
 	useEffect(() => {
+		console.log(students);
 		const currPath = location.pathname.split("/");
 		if (currPath.length == 3) {
 			setPage(0);
 		} else if (currPath[2] == "view") {
 			setPage(1);
+			setCurrStudent(currPath[3]);
 		} else if (currPath[2] == "edit") {
 			setPage(2);
+			setCurrStudent(currPath[3]);
 		}
 	}, []);
 
@@ -142,6 +146,7 @@ const AddStudent = ({ auth }) => {
 								subjectName={subject}
 								results={results}
 								setResults={setResults}
+								auth={auth}
 							/>
 						</div>
 					))}
@@ -162,6 +167,7 @@ const AddStudent = ({ auth }) => {
 					<select
 						value={crossExamination}
 						onChange={(e) => setCrossExamination(e.target.value)}
+						disabled={!auth}
 					>
 						<option value="Bad">Bad</option>
 						<option value="Average">Average</option>
@@ -172,6 +178,7 @@ const AddStudent = ({ auth }) => {
 					<select
 						value={explaination}
 						onChange={(e) => setExplaination(e.target.value)}
+						disabled={!auth}
 					>
 						<option value="Bad">Bad</option>
 						<option value="Average">Average</option>
@@ -179,14 +186,22 @@ const AddStudent = ({ auth }) => {
 						<option value="Excellent">Excellent</option>
 					</select>
 					<label>Verbal:</label>
-					<select value={verbal} onChange={(e) => setVerbal(e.target.value)}>
+					<select
+						value={verbal}
+						onChange={(e) => setVerbal(e.target.value)}
+						disabled={!auth}
+					>
 						<option value="Bad">Bad</option>
 						<option value="Average">Average</option>
 						<option value="Good">Good</option>
 						<option value="Excellent">Excellent</option>
 					</select>
 					<label>CTC:</label>
-					<select value={ctc} onChange={(e) => setCtc(e.target.value)}>
+					<select
+						value={ctc}
+						onChange={(e) => setCtc(e.target.value)}
+						disabled={!auth}
+					>
 						<option value="Rejected">Rejected</option>
 						<option value="<3LPA">Below 3 LPA</option>
 						<option value="3-5LPA">3-5 LPA</option>

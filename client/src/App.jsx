@@ -7,7 +7,7 @@ import axios from "axios";
 
 function App() {
 	const [students, setStudents] = useState();
-	const [auth, setAuth] = useState(false);
+	const [auth, setAuth] = useState(true);
 
 	useEffect(() => {
 		fetchStudents();
@@ -23,8 +23,14 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Dashboard students={students} />} />
 				<Route path="/student/new" element={<AddStudent auth={auth} />} />
-				<Route path="/student/view/:id" element={<AddStudent auth={auth} />} />
-				<Route path="/student/edit/:id" element={<AddStudent auth={auth} />} />
+				<Route
+					path="/student/view/:id"
+					element={<AddStudent auth={auth} students={students} />}
+				/>
+				<Route
+					path="/student/edit/:id"
+					element={<AddStudent auth={auth} students={students} />}
+				/>
 			</Routes>
 		</BrowserRouter>
 	);
