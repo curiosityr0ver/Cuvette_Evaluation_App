@@ -2,11 +2,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+require('dotenv').config(); // will config the .env file present in the directory
 
 
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 5000;
+const PIN_1 = process.env.PIN_1;
+const PIN_2 = process.env.PIN_2;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,14 +31,35 @@ MongoClient.connect(mongoURI)
 
         // Authentication route
         app.post('/user/login', (req, res) => {
+            console.log("yoloooooo");
             const { pin } = req.body;
-            // Implement your authentication logic here
-            // For simplicity, let's assume the user is always authenticated
-            res.json({ message: 'Authentication successful' });
+            console.log("here", pin);
+            // if (pin == PIN_1) {
+            //     const user = {
+            //         author: "Ishu Mehta",
+            //     };
+            //     const token = generateToken(user);
+            //     res.json({
+            //         message: 'Authentication successful',
+            //         token: token
+            //     });
+            // } else if (pin == PIN_2) {
+            //     const user = {
+            //         author: "Kumar Shubhranshu"
+            //     };
+            //     const token = generateToken(user);
+            //     res.json({
+            //         message: 'Authentication successful',
+            //         token: token
+            //     });
+            // }
+            res.json({
+                message: 'Authentication failed',
+            });
         });
 
         app.post('/user/register', (req, res) => {
-            const { username, pin, auth } = req.body;
+            const { pin } = req.body;
             const newUser = req.body;
             newUser.timestamp = new Date();
 
@@ -97,3 +123,21 @@ MongoClient.connect(mongoURI)
         });
     })
     .catch(err => console.error(err));
+
+
+const generateToken = (user) => {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        'expiresIn': '4h'
+    });
+};
+
+const validateToken = async (token, tokenSecret) => {
+    // returns user info, if the jwt token is valid
+    return await jwt.verify(token, tokenSecret,
+        (error, payload) => {
+            if (error) {
+                throw (error);
+            }
+            return payload;
+        });
+};

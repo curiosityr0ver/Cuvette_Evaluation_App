@@ -1,8 +1,9 @@
 // Dashboard.js
-// import { useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Dashboard = ({ students }) => {
+const Dashboard = ({ students, setAuth }) => {
+	const [pin, setPin] = useState();
 	const formatDate = (timestamp) => {
 		const date = new Date(timestamp);
 		return date.toLocaleString("en-US", {
@@ -13,6 +14,11 @@ const Dashboard = ({ students }) => {
 			minute: "2-digit",
 			hour12: true,
 		});
+	};
+	const handleLogin = async () => {
+		console.log("Logging In");
+		const { data } = await axios.post("http://localhost:5000/stud", pin);
+		console.log(data);
 	};
 	const totalScore = (student) => {
 		const { results } = student;
@@ -28,9 +34,14 @@ const Dashboard = ({ students }) => {
 		<div>
 			<h1>Student Dashboard</h1>
 			<h3>Enter PIN</h3>
-			<button>Login</button>
+			<button onClick={handleLogin}>Login</button>
+			<input
+				value={pin}
+				onChange={(e) => setPin(e.target.value)}
+				type="password"
+			/>
 			<br />
-			<input type="password" />
+
 			<Link to={`/student/new`}>Add New Student</Link>
 			<table>
 				<thead>
