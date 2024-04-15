@@ -5,11 +5,10 @@ import AddStudent from "./student/AddStudent";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// import StudentDetail from "./StudentDetail";
-// import AddStudent from "./AddStudent";
-
 function App() {
 	const [students, setStudents] = useState();
+	const [auth, setAuth] = useState(false);
+
 	useEffect(() => {
 		fetchStudents();
 	}, []);
@@ -23,8 +22,9 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Dashboard students={students} />} />
-				{/* <Route path="/student/:id" component={StudentDetail} /> */}
-				<Route path="/student/new" element={<AddStudent />} />
+				<Route path="/student/new" element={<AddStudent auth={auth} />} />
+				<Route path="/student/view/:id" element={<AddStudent auth={auth} />} />
+				<Route path="/student/edit/:id" element={<AddStudent auth={auth} />} />
 			</Routes>
 		</BrowserRouter>
 	);

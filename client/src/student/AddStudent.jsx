@@ -1,9 +1,11 @@
 // AddStudent.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SubjectMarkingWidget from "./SubjectMarkingWidget";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
-const AddStudent = () => {
+const AddStudent = ({ auth }) => {
+	const [page, setPage] = useState();
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
@@ -13,6 +15,8 @@ const AddStudent = () => {
 	const [ctc, setCtc] = useState("Rejected");
 	const [remark, setRemark] = useState("No Remarks");
 	const [finalFeedback, setFinalFeedback] = useState("No Feedback");
+
+	const location = useLocation();
 
 	const subjects = ["JavaScript", "React", "Node-Express", "Database"];
 
@@ -35,12 +39,36 @@ const AddStudent = () => {
 
 		const { data } = await axios.post("http://localhost:5000/student", student);
 		console.log(data);
-		// setMarks(new Array(6).fill(""));
 	};
+
+	const getHeader = () => {
+		if (page == 0) {
+			return "Add Student";
+		} else if (page == 1) {
+			return "View Student";
+		} else {
+			return "Edit Student";
+		}
+	};
+
+	useEffect(() => {
+		const currPath = location.pathname.split("/");
+		if (currPath.length == 3) {
+			setPage(0);
+		} else if (currPath[2] == "view") {
+			setPage(1);
+		} else if (currPath[2] == "edit") {
+			setPage(2);
+		}
+	}, []);
+
+	useEffect(() => {
+		if (page) console.log(page);
+	}, [page]);
 
 	return (
 		<div>
-			<h1>Add Student</h1>
+			<h1>{getHeader()}</h1>
 			<div
 				style={{
 					display: "flex",
@@ -62,11 +90,13 @@ const AddStudent = () => {
 						type="text"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
+						disabled={!auth}
 					/>
 					<label>Interview:</label>
 					<select
 						value={interview}
 						onChange={(e) => setInterview(e.target.value)}
+						disabled={!auth}
 					>
 						<option value="3">Mock</option>
 					</select>
@@ -74,6 +104,7 @@ const AddStudent = () => {
 					<textarea
 						value={remark}
 						onChange={(e) => setRemark(e.target.value)}
+						disabled={!auth}
 						name=""
 						id=""
 						cols="30"
@@ -83,12 +114,15 @@ const AddStudent = () => {
 					<textarea
 						value={finalFeedback}
 						onChange={(e) => setFinalFeedback(e.target.value)}
+						disabled={!auth}
 						name=""
 						id=""
 						cols="30"
 						rows="10"
 					></textarea>
-					<button onClick={handleSubmit}>Add Student</button>
+					<button onClick={handleSubmit} disabled={!auth}>
+						Add Student
+					</button>
 				</div>
 				<div
 					style={{

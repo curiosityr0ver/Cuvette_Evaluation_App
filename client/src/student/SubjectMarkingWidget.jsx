@@ -30,10 +30,6 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults }) => {
 
 	useEffect(() => {
 		// results.subjectName = `${correctCount}/${marks.length}`;
-		console.log(subjectName);
-		if (subjectName.split('"').length > 1) {
-			console.log(subjectName.split('"')[1]);
-		}
 		setResults({
 			...results,
 			[subjectName]: `${correctCount}/${marks.length}`,
