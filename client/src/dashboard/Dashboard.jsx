@@ -42,16 +42,16 @@ const Dashboard = ({ students }) => {
 							<td>{student.name}</td>
 							<td>{formatDate(student.timestamp)}</td>
 							<td>{student.interview}</td>
-							<td>{student.Javascript}</td>
-							<td>{student.React}</td>
-							<td>{student["Node-Express"]}</td>
-							<td>{student.Database}</td>
-							<td>{student["Cross-Questioning"]}</td>
+							<td>{student.results?.JavaScript}</td>
+							<td>{student.results?.React}</td>
+							<td>{student.results?.["Node-Express"]}</td>
+							<td>{student.results?.Database}</td>
+							<td>{student?.["Cross-Examination"]}</td>
 							<td>{student.Explaination}</td>
-							<td>{student["Verbal-Communication"]}</td>
+							<td>{student.verbal}</td>
 							<td>{student.total}</td>
 							<td>{student.CTC}</td>
-							<td>{student.Remark}</td>
+							<td>{student.remark}</td>
 							<td>{student["Final-Feedback"]}</td>
 							<Link to={`/student/${student._id}`}>View</Link>
 						</tr>

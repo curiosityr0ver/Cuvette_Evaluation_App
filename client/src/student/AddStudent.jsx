@@ -7,37 +7,18 @@ const AddStudent = () => {
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
-	const [crossExamination, setCrossExamination] = useState();
-	const [explaination, setExplaination] = useState();
-	const [verbal, setVerbal] = useState();
-	const [ctc, setCtc] = useState();
-	const [remark, setRemark] = useState();
-	const [finalFeedback, setFinalFeedback] = useState();
+	const [crossExamination, setCrossExamination] = useState("Bad");
+	const [explaination, setExplaination] = useState("Bad");
+	const [verbal, setVerbal] = useState("Bad");
+	const [ctc, setCtc] = useState("Rejected");
+	const [remark, setRemark] = useState("No Remarks");
+	const [finalFeedback, setFinalFeedback] = useState("No Feedback");
 
 	const subjects = ["JavaScript", "React", "Node-Express", "Database"];
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const date = new Date();
-		if (!interview) {
-			setInterview("Mock");
-		}
-		if (!crossExamination) {
-			setCrossExamination("Bad");
-		}
-		if (!explaination) {
-			setExplaination("Bad");
-		}
-		if (!verbal) {
-			setVerbal("Bad");
-		}
-		if (!ctc) {
-			setCtc("Rejected");
-		}
-		if (!remark) {
-			setRemark("No Remarks");
-		}
-
 		const student = {
 			name,
 			interview,
