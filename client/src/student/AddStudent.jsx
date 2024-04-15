@@ -4,12 +4,12 @@ import SubjectMarkingWidget from "./SubjectMarkingWidget";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-const AddStudent = ({ auth, students }) => {
+const AddStudent = ({ auth }) => {
 	const [page, setPage] = useState();
 	const [currStudent, setCurrStudent] = useState();
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
-	const [results, setResults] = useState([]);
+	const [results, setResults] = useState();
 	const [crossExamination, setCrossExamination] = useState("Bad");
 	const [explaination, setExplaination] = useState("Bad");
 	const [verbal, setVerbal] = useState("Bad");
@@ -52,23 +52,23 @@ const AddStudent = ({ auth, students }) => {
 		}
 	};
 
+	const fetchStudents = async (stud_id) => {
+		const { data } = await axios.get(
+			`http://localhost:5000/student/${stud_id}`
+		);
+		setCurrStudent(data);
+	};
+
 	useEffect(() => {
 		const currPath = location.pathname.split("/");
 		if (currPath.length == 3) {
 			setPage(0);
 		} else if (currPath[2] == "view") {
 			setPage(1);
-			const ourStudent = students?.find(
-				(student) => student._id == currPath[3]
-			);
-			console.log(ourStudent);
-			setCurrStudent(ourStudent);
+			fetchStudents(currPath[3]);
 		} else if (currPath[2] == "edit") {
 			setPage(2);
-			const ourStudent = students?.find(
-				(student) => student._id == currPath[3]
-			);
-			setCurrStudent(ourStudent);
+			fetchStudents(currPath[3]);
 		}
 	}, []);
 	useEffect(() => {
@@ -85,7 +85,17 @@ const AddStudent = ({ auth, students }) => {
 			setCtc(currStudent.ctc);
 		}
 	}, [currStudent]);
-	if (true) {
+	if (
+		name &&
+		interview &&
+		remark &&
+		finalFeedback &&
+		results &&
+		crossExamination &&
+		explaination &&
+		verbal &&
+		ctc
+	) {
 		return (
 			<div>
 				<h1>{getHeader()}</h1>
@@ -160,7 +170,7 @@ const AddStudent = ({ auth, students }) => {
 							<div key={index}>
 								<SubjectMarkingWidget
 									subjectName={subject}
-									results={results}
+									results={results[subject]}
 									setResults={setResults}
 									auth={auth}
 								/>

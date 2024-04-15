@@ -16,36 +16,21 @@ const Dashboard = ({ students }) => {
 	};
 	const totalScore = (student) => {
 		const { results } = student;
-		const db = results.Database.split("/");
-		const js = results.JavaScript.split("/");
-		const node = results["Node-Express"].split("/");
-		const react = results.React.split("/");
-		const sum =
-			parseInt(db[0]) +
-			parseInt(js[0]) +
-			parseInt(node[0]) +
-			parseInt(react[0]);
-		const denom =
-			parseInt(db[1]) +
-			parseInt(js[1]) +
-			parseInt(node[1]) +
-			parseInt(react[1]);
-		return `${sum}/${denom}`;
-
-		// console.log(parseInt(res));
-		// const res =
-		// 	0 +
-		// 	// results.JavaScript +
-		// 	// results.React +
-		// 	// results["Node-Express"] +
-		// 	// results.Database;
-		// 	console.log(res);
+		const db = results.Database;
+		const js = results.JavaScript;
+		const node = results.NodeExpress;
+		const react = results.React;
+		const sum = db[0] + js[0] + node[0] + react[0];
+		const denom = db[1] + js[1] + node[1] + react[1];
+		return [sum, denom];
 	};
-	// totalScore();
-	console.log(students?.[0]?.results.JavaScript);
 	return (
 		<div>
 			<h1>Student Dashboard</h1>
+			<h3>Enter PIN</h3>
+			<button>Login</button>
+			<br />
+			<input type="password" />
 			<Link to={`/student/new`}>Add New Student</Link>
 			<table>
 				<thead>
@@ -82,7 +67,7 @@ const Dashboard = ({ students }) => {
 								<td>{student?.crossExamination}</td>
 								<td>{student?.explaination}</td>
 								<td>{student.verbal}</td>
-								{/* <td>{totalScore(student)}</td> */}
+								<td>{totalScore(student).join("/")}</td>
 								<td>{student.CTC}</td>
 								<td>{student.remark}</td>
 								<td>{student.finalFeedback}</td>

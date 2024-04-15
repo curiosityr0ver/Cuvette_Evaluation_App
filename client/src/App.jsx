@@ -21,12 +21,12 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<Dashboard students={students} />} />
-				<Route path="/student/new" element={<AddStudent auth={auth} />} />
 				<Route
-					path="/student/view/:id"
-					element={<AddStudent auth={false} students={students} />}
+					path="/"
+					element={<Dashboard students={students} setAuth={setAuth} />}
 				/>
+				<Route path="/student/new" element={<AddStudent auth={auth} />} />
+				<Route path="/student/view/:id" element={<AddStudent auth={false} />} />
 				<Route
 					path="/student/edit/:id"
 					element={<AddStudent auth={auth} students={students} />}

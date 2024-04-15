@@ -17,6 +17,22 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 
 	const correctCount = marks.filter((mark) => mark === true).length;
 
+	useEffect(() => {
+		if (results) {
+			console.log(results);
+			const newMarks = [];
+			for (let i = 0; i < results[1]; i++) {
+				if (i <= results[0]) {
+					newMarks.push(true);
+				} else {
+					newMarks.push(false);
+				}
+			}
+			console.log(newMarks);
+			setMarks([...newMarks]);
+		}
+	}, []);
+
 	const addQuestion = () => {
 		setMarks([...marks, null]);
 		// submitMarks(prev => {
