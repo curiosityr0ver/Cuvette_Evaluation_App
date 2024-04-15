@@ -5,7 +5,14 @@ import { Link } from "react-router-dom";
 const Dashboard = ({ students }) => {
 	const formatDate = (timestamp) => {
 		const date = new Date(timestamp);
-		return date.toLocaleString();
+		return date.toLocaleString("en-US", {
+			day: "numeric",
+			month: "short",
+			year: "2-digit",
+			hour: "numeric",
+			minute: "2-digit",
+			hour12: true,
+		});
 	};
 	const totalScore = (student) => {
 		const { results } = student;
@@ -35,6 +42,7 @@ const Dashboard = ({ students }) => {
 		// 	console.log(res);
 	};
 	// totalScore();
+	console.log(students?.[0]?.results.JavaScript);
 	return (
 		<div>
 			<h1>Student Dashboard</h1>
@@ -67,14 +75,14 @@ const Dashboard = ({ students }) => {
 								<td>{student.name}</td>
 								<td>{formatDate(student.timestamp)}</td>
 								<td>{student.interview}</td>
-								<td>{student.results?.JavaScript}</td>
-								<td>{student.results?.React}</td>
-								<td>{student.results?.["Node-Express"]}</td>
-								<td>{student.results?.Database}</td>
+								<td>{student.results?.JavaScript.join("/")}</td>
+								<td>{student.results?.React.join("/")}</td>
+								<td>{student.results?.NodeExpress.join("/")}</td>
+								<td>{student.results?.Database.join("/")}</td>
 								<td>{student?.crossExamination}</td>
 								<td>{student?.explaination}</td>
 								<td>{student.verbal}</td>
-								<td>{totalScore(student)}</td>
+								{/* <td>{totalScore(student)}</td> */}
 								<td>{student.CTC}</td>
 								<td>{student.remark}</td>
 								<td>{student.finalFeedback}</td>
