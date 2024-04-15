@@ -25,7 +25,7 @@ function App() {
 				<Route path="/student/new" element={<AddStudent auth={auth} />} />
 				<Route
 					path="/student/view/:id"
-					element={<AddStudent auth={auth} students={students} />}
+					element={<AddStudent auth={false} students={students} />}
 				/>
 				<Route
 					path="/student/edit/:id"

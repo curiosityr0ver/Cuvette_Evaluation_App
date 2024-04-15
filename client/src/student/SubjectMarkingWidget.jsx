@@ -32,7 +32,7 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 		// results.subjectName = `${correctCount}/${marks.length}`;
 		setResults({
 			...results,
-			[subjectName]: `${correctCount}/${marks.length}`,
+			[subjectName]: [correctCount, marks.length],
 		});
 	}, [marks]);
 
