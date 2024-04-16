@@ -37,16 +37,13 @@ const AddStudent = ({ auth }) => {
 		//axios
 
 		// const token = localStorage.getItem("token");
-		console.log(student);
-		const { data } = await axios.post(
-			"http://localhost:5000/student",
-			student,
-			{
-				headers: {
-					Authorization: "Bearer " + auth,
-				},
-			}
-		);
+		const SERVER_URL =
+			import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
+		const { data } = await axios.post(`${SERVER_URL}/student`, student, {
+			headers: {
+				Authorization: "Bearer " + auth,
+			},
+		});
 		console.log(data);
 	};
 

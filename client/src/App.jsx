@@ -17,10 +17,13 @@ function App() {
 			setAuth(token);
 		}
 	}, []);
-
+	const SERVER_URL =
+		import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
+	console.log(SERVER_URL);
 	const fetchStudents = async () => {
-		const { data } = await axios.get("http://localhost:5000/student");
+		const { data } = await axios.get(`${SERVER_URL}/student`);
 		setStudents(data);
+		console.log("data: ", data);
 	};
 
 	return (

@@ -1,5 +1,5 @@
 // Dashboard.js
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -17,8 +17,10 @@ const Dashboard = ({ students, auth, setAuth }) => {
 			hour12: true,
 		});
 	};
+	const SERVER_URL =
+		import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
 	const handleLogin = async () => {
-		const { data } = await axios.post("http://localhost:5000/user/login", {
+		const { data } = await axios.post(`${SERVER_URL}/user/login`, {
 			pin,
 		});
 		if (data.token) {

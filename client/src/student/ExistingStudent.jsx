@@ -39,8 +39,9 @@ const ExistingStudent = ({ auth }) => {
 		//axios
 
 		const token = localStorage.getItem("token");
-
-		const { data } = await axios.post("http://localhost:5000/student", {
+		const SERVER_URL =
+			import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
+		const { data } = await axios.post(`${SERVER_URL}/student`, {
 			student,
 			token,
 		});
