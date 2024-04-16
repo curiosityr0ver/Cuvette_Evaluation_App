@@ -31,28 +31,27 @@ MongoClient.connect(mongoURI)
 
         // Authentication route
         app.post('/user/login', (req, res) => {
-            console.log("yoloooooo");
             const { pin } = req.body;
             console.log("here", pin);
-            // if (pin == PIN_1) {
-            //     const user = {
-            //         author: "Ishu Mehta",
-            //     };
-            //     const token = generateToken(user);
-            //     res.json({
-            //         message: 'Authentication successful',
-            //         token: token
-            //     });
-            // } else if (pin == PIN_2) {
-            //     const user = {
-            //         author: "Kumar Shubhranshu"
-            //     };
-            //     const token = generateToken(user);
-            //     res.json({
-            //         message: 'Authentication successful',
-            //         token: token
-            //     });
-            // }
+            if (pin == PIN_1) {
+                const user = {
+                    author: "Ishu Mehta",
+                };
+                const token = generateToken(user);
+                res.json({
+                    message: 'Authentication successful',
+                    token: token
+                });
+            } else if (pin == PIN_2) {
+                const user = {
+                    author: "Kumar Shubhranshu"
+                };
+                const token = generateToken(user);
+                res.json({
+                    message: 'Authentication successful',
+                    token: token
+                });
+            }
             res.json({
                 message: 'Authentication failed',
             });
@@ -89,6 +88,7 @@ MongoClient.connect(mongoURI)
         });
 
         app.post('/student', (req, res) => {
+            return console.log(req.body);
             const newStudent = req.body;
             newStudent.timestamp = new Date();
             studentsCollection.insertOne(newStudent)
@@ -126,7 +126,8 @@ MongoClient.connect(mongoURI)
 
 
 const generateToken = (user) => {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    console.log(user);
+    return jwt.sign(user, process.env.SECRET_KEY, {
         'expiresIn': '4h'
     });
 };
@@ -138,6 +139,6 @@ const validateToken = async (token, tokenSecret) => {
             if (error) {
                 throw (error);
             }
-            return payload;
+            req.user = decoded;
         });
 };

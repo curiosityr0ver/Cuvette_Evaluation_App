@@ -1,9 +1,12 @@
 // Dashboard.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import Loader from "../components/Loader";
 
-const Dashboard = ({ students, setAuth }) => {
+const Dashboard = ({ students, auth, setAuth }) => {
 	const [pin, setPin] = useState();
+
 	const formatDate = (timestamp) => {
 		const date = new Date(timestamp);
 		return date.toLocaleString("en-US", {
@@ -16,9 +19,16 @@ const Dashboard = ({ students, setAuth }) => {
 		});
 	};
 	const handleLogin = async () => {
-		console.log("Logging In");
-		const { data } = await axios.post("http://localhost:5000/stud", pin);
+		const { data } = await axios.post("http://localhost:5000/user/login", {
+			pin,
+		});
+		if (data.token) {
+			localStorage.setItem("token", data.token);
+			setAuth(data.token);
+		}
+
 		console.log(data);
+		localStorage.setItem("token", data.token);
 	};
 	const totalScore = (student) => {
 		const { results } = student;
@@ -30,6 +40,13 @@ const Dashboard = ({ students, setAuth }) => {
 		const denom = db[1] + js[1] + node[1] + react[1];
 		return [sum, denom];
 	};
+
+	useEffect(() => {
+		if (auth) {
+			console.log(auth);
+		}
+	}, [auth]);
+
 	return (
 		<div>
 			<h1>Student Dashboard</h1>
