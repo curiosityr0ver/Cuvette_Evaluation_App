@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Loader from "../components/Loader";
 
 const Dashboard = ({ students, auth, setAuth }) => {
 	const [pin, setPin] = useState();
@@ -26,32 +25,31 @@ const Dashboard = ({ students, auth, setAuth }) => {
 			localStorage.setItem("token", data.token);
 			setAuth(data.token);
 		}
-
-		console.log(data);
-		localStorage.setItem("token", data.token);
 	};
+
+	const handleLogout = () => {
+		localStorage.removeItem("token");
+		setAuth(null);
+	};
+
 	const totalScore = (student) => {
 		const { results } = student;
-		const db = results.Database;
-		const js = results.JavaScript;
-		const node = results.NodeExpress;
-		const react = results.React;
+		const db = results?.Database || [0, 10];
+		const js = results?.JavaScript || [0, 10];
+		const node = results?.NodeExpress || [0, 10];
+		const react = results.React || [0, 10];
 		const sum = db[0] + js[0] + node[0] + react[0];
 		const denom = db[1] + js[1] + node[1] + react[1];
 		return [sum, denom];
 	};
-
-	useEffect(() => {
-		if (auth) {
-			console.log(auth);
-		}
-	}, [auth]);
 
 	return (
 		<div>
 			<h1>Student Dashboard</h1>
 			<h3>Enter PIN</h3>
 			<button onClick={handleLogin}>Login</button>
+			<button onClick={handleLogout}>Logout</button>
+
 			<input
 				value={pin}
 				onChange={(e) => setPin(e.target.value)}
@@ -59,7 +57,7 @@ const Dashboard = ({ students, auth, setAuth }) => {
 			/>
 			<br />
 
-			<Link to={`/student/new`}>Add New Student</Link>
+			{auth && <Link to={`/student/new`}>Add New Student</Link>}
 			<table>
 				<thead>
 					<tr>
@@ -78,6 +76,7 @@ const Dashboard = ({ students, auth, setAuth }) => {
 						<th>Remark</th>
 						<th>Final Feedback</th>
 						<th>Actions</th>
+						<th>Author</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -88,13 +87,13 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td>{student.name}</td>
 								<td>{formatDate(student.timestamp)}</td>
 								<td>{student.interview}</td>
-								<td>{student.results?.JavaScript.join("/")}</td>
-								<td>{student.results?.React.join("/")}</td>
-								<td>{student.results?.NodeExpress.join("/")}</td>
-								<td>{student.results?.Database.join("/")}</td>
+								<td>{student.results?.JavaScript?.join("/")}</td>
+								<td>{student.results?.React?.join("/")}</td>
+								<td>{student.results?.NodeExpress?.join("/")}</td>
+								<td>{student.results?.Database?.join("/")}</td>
 								<td>{student?.crossExamination}</td>
 								<td>{student?.explaination}</td>
-								<td>{student.verbal}</td>
+								<td>{student?.verbal}</td>
 								<td>{totalScore(student).join("/")}</td>
 								<td>{student.CTC}</td>
 								<td>{student.remark}</td>
@@ -102,8 +101,8 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td>
 									<Link to={`/student/view/${student._id}`}>View</Link>
 									<Link to={`/student/edit/${student._id}`}>Edit</Link>
-									<button>Delete</button>
 								</td>
+								<td>{student?.author}</td>
 							</tr>
 						))}
 				</tbody>

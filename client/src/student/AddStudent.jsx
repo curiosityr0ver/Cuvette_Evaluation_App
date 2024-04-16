@@ -38,10 +38,15 @@ const AddStudent = ({ auth }) => {
 
 		// const token = localStorage.getItem("token");
 		console.log(student);
-		const { data } = await axios.post("http://localhost:5000/student", {
+		const { data } = await axios.post(
+			"http://localhost:5000/student",
 			student,
-			// token,
-		});
+			{
+				headers: {
+					Authorization: "Bearer " + auth,
+				},
+			}
+		);
 		console.log(data);
 	};
 

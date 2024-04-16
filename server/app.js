@@ -88,16 +88,24 @@ MongoClient.connect(mongoURI)
         });
 
         app.post('/student', (req, res) => {
-            return console.log(req.body);
-            const newStudent = req.body;
-            newStudent.timestamp = new Date();
-            studentsCollection.insertOne(newStudent)
-                .then(result => {
-                    studentsCollection.find({}).toArray()
-                        .then(students => res.json(students))
-                        .catch(err => console.error(err));
-                })
-                .catch(err => console.error(err));
+
+            try {
+                const token = req.headers.authorization.split(' ')[1];
+                const decoded = jwt.verify(token, SECRET_KEY);
+                const newStudent = { ...req.body };
+                newStudent.timestamp = new Date();
+                newStudent.author = decoded.author;
+                studentsCollection.insertOne(newStudent)
+                    .then(result => {
+                        studentsCollection.find({}).toArray()
+                            .then(students => res.status(201).json({ message: 'Student added successfully', students }))
+                            .catch(err => console.error(err));
+                    })
+                    .catch(err => console.error(err));
+            } catch (error) {
+                console.log(error);
+                res.status(401).json({ message: 'Invalid Authorization' });
+            }
         });
 
         app.put('/student/:id', (req, res) => {
