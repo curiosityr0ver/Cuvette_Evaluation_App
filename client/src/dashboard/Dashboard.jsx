@@ -1,10 +1,17 @@
 // Dashboard.js
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import styles from "./Dashboard.module.css";
+import NavBar from "../components/NavBar";
 
 const Dashboard = ({ students, auth, setAuth }) => {
-	const [pin, setPin] = useState();
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		if (students) {
+			setLoading(false);
+		}
+	}, [students]);
 
 	const formatDate = (timestamp) => {
 		const date = new Date(timestamp);
@@ -16,22 +23,6 @@ const Dashboard = ({ students, auth, setAuth }) => {
 			minute: "2-digit",
 			hour12: true,
 		});
-	};
-	const SERVER_URL =
-		import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
-	const handleLogin = async () => {
-		const { data } = await axios.post(`${SERVER_URL}/user/login`, {
-			pin,
-		});
-		if (data.token) {
-			localStorage.setItem("token", data.token);
-			setAuth(data.token);
-		}
-	};
-
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		setAuth(null);
 	};
 
 	const totalScore = (student) => {
@@ -46,20 +37,10 @@ const Dashboard = ({ students, auth, setAuth }) => {
 	};
 
 	return (
-		<div>
+		<div className={styles.page}>
+			<NavBar auth={auth} setAuth={setAuth} />
 			<h1>Student Dashboard</h1>
-			<h3>Enter PIN</h3>
-			<button onClick={handleLogin}>Login</button>
-			<button onClick={handleLogout}>Logout</button>
 
-			<input
-				value={pin}
-				onChange={(e) => setPin(e.target.value)}
-				type="password"
-			/>
-			<br />
-
-			{auth && <Link to={`/student/new`}>Add New Student</Link>}
 			<table>
 				<thead>
 					<tr>
@@ -107,6 +88,7 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td>{student?.author}</td>
 							</tr>
 						))}
+					{loading && <tr>Loading...</tr>}
 				</tbody>
 			</table>
 		</div>
