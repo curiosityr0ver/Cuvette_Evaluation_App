@@ -18,7 +18,6 @@ const Dashboard = ({ students, auth, setAuth }) => {
 		return date.toLocaleString("en-US", {
 			day: "numeric",
 			month: "short",
-			year: "2-digit",
 			hour: "numeric",
 			minute: "2-digit",
 			hour12: true,
@@ -47,16 +46,16 @@ const Dashboard = ({ students, auth, setAuth }) => {
 						<th>Name</th>
 						<th>Date</th>
 						<th>Interview</th>
-						<th>JavaScript</th>
+						<th>JS</th>
 						<th>React</th>
 						<th>Node-Express</th>
 						<th>Database</th>
-						<th>Cross Questioning</th>
+						<th>Cross Qtn</th>
 						<th>Explaination</th>
 						<th>Verbal Comm</th>
 						<th>Total</th>
 						<th>CTC</th>
-						<th>Remark</th>
+						<th>Remarks</th>
 						<th>Final Feedback</th>
 						<th>Actions</th>
 						<th>Author</th>
@@ -68,7 +67,9 @@ const Dashboard = ({ students, auth, setAuth }) => {
 						?.map((student) => (
 							<tr key={student._id}>
 								<td>{student.name}</td>
-								<td>{formatDate(student.timestamp)}</td>
+								<td className={styles.inline}>
+									{formatDate(student.timestamp)}
+								</td>
 								<td>{student.interview}</td>
 								<td>{student.results?.JavaScript?.join("/")}</td>
 								<td>{student.results?.React?.join("/")}</td>

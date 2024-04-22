@@ -56,3 +56,25 @@ button:disabled {
 button:disabled:hover {
   border: gray;
 }
+
+input[type="password"] {
+  margin-left: 3px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Hover effect */
+input[type="password"]:hover {
+  border-color: #aaa;
+}
+
+/* Focus effect */
+input[type="password"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

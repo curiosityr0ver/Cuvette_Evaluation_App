@@ -19,27 +19,31 @@ function NavBar({ auth, setAuth }) {
 		const { data } = await axios.post(`${SERVER_URL}/user/login`, {
 			pin,
 		});
+		console.log(data);
 		setLoading(false);
 		if (data.token) {
 			localStorage.setItem("token", data.token);
 			setAuth(data.token);
+		} else {
+			alert("Invalid PIN");
 		}
 	};
 
 	return (
 		<div className={styles.auth}>
-			<h3>Enter PIN</h3>
-			{!auth ? (
+			{loading ? (
+				<button>Loading</button>
+			) : !auth ? (
 				<button onClick={handleLogin}>Login</button>
 			) : (
 				<button onClick={handleLogout}>Logout</button>
 			)}
-			{loading && <p>Loading...</p>}
 
 			{!auth && (
 				<input
 					value={pin}
 					onChange={(e) => setPin(e.target.value)}
+					placeholder="Enter PIN"
 					type="password"
 				/>
 			)}
