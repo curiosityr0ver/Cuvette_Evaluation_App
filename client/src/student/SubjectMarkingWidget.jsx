@@ -1,127 +1,93 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
-	const [marks, setMarks] = useState(new Array(10).fill(null));
+const SubjectMarkingWidget = ({ subjectName, setResults }) => {
+	const totalQuestions = 10;
+	const [questionStates, setQuestionStates] = useState(
+		new Array(totalQuestions).fill(0)
+	);
 
 	const toggleMark = (index) => {
-		const newMarks = [...marks];
-		if (newMarks[index] === null) {
-			newMarks[index] = true; // Mark as correct
-		} else if (newMarks[index] === true) {
-			newMarks[index] = false; // Mark as incorrect
-		} else {
-			newMarks[index] = null; // Reset mark
-		}
-		setMarks(newMarks);
-	};
-
-	const correctCount = marks.filter((mark) => mark === true).length;
-
-	useEffect(() => {
-		if (results) {
-			console.log(results);
-			const newMarks = [];
-			for (let i = 0; i < results[1]; i++) {
-				if (i <= results[0]) {
-					newMarks.push(true);
-				} else {
-					newMarks.push(false);
-				}
-			}
-			console.log(newMarks);
-			setMarks([...newMarks]);
-		}
-	}, []);
-
-	const addQuestion = () => {
-		setMarks([...marks, null]);
-		// submitMarks(prev => {
-		// 	...prev,
-		// 	[subjectName]: `${correctCount}/${marks.length}`
-		// });
-	};
-	const removeQuestion = () => {
-		setMarks(marks.slice(0, marks.length - 1));
-	};
-
-	useEffect(() => {
-		// results.subjectName = `${correctCount}/${marks.length}`;
-		setResults({
-			...results,
-			[subjectName]: [correctCount, marks.length],
+		const newQuestionStates = [...questionStates];
+		newQuestionStates[index] = (newQuestionStates[index] + 1) % 4; // Cycle through 0, 1, 2, 3
+		setQuestionStates(newQuestionStates);
+		setResults((results) => {
+			const newResults = { ...results };
+			newResults[subjectName] = newQuestionStates;
+			return newResults;
 		});
-	}, [marks]);
+	};
+
+	const getColor = (state) => {
+		if (state === 1) return "green";
+		if (state === 2) return "yellow";
+		if (state === 3) return "red";
+		return "transparent";
+	};
+
+	const correctCount = questionStates.filter((state) => state === 1).length;
+	const partiallyCorrectCount = questionStates.filter(
+		(state) => state === 2
+	).length;
 
 	return (
 		<div>
-			<h5
-				style={{
-					padding: "0px",
-					margin: "0px",
-				}}
-			>
-				{subjectName}{" "}
-			</h5>
+			<h2>{subjectName}</h2>
 			<p>
-				Correct Questions: {correctCount} / {marks.length}
+				Correct Questions: {correctCount + partiallyCorrectCount * 0.5} /{" "}
+				{totalQuestions}
 			</p>
 			<div style={{ display: "flex", flexWrap: "wrap" }}>
-				{marks.map((mark, index) => (
+				{questionStates.map((state, index) => (
 					<div
 						key={index}
 						style={{
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
 							width: "25px",
 							height: "25px",
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
 							borderRadius: "50%",
 							border: "1px solid #000",
 							margin: "5px",
-							backgroundColor:
-								mark === null ? "transparent" : mark === true ? "green" : "red",
+							backgroundColor: getColor(state),
 						}}
-						onClick={auth ? () => toggleMark(index) : null}
+						onClick={() => toggleMark(index)}
 					>
-						{index + 1}
+						{index}
 					</div>
 				))}
-				{auth && (
-					<>
-						<div
-							style={{
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								width: "25px",
-								height: "25px",
-								borderRadius: "50%",
-								border: "1px solid #000",
-								margin: "5px",
-								backgroundColor: "gray",
-							}}
-							onClick={() => addQuestion()}
-						>
-							+
-						</div>
-						<div
-							style={{
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-								width: "25px",
-								height: "25px",
-								borderRadius: "50%",
-								border: "1px solid #000",
-								margin: "5px",
-								backgroundColor: "gray",
-							}}
-							onClick={() => removeQuestion()}
-						>
-							-
-						</div>
-					</>
-				)}
+				<div
+					style={{
+						width: "25px",
+						height: "25px",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						borderRadius: "50%",
+						border: "1px solid #000",
+						margin: "5px",
+						backgroundColor: "gray",
+					}}
+					// onClick={() => toggleMark(index)}
+				>
+					+
+				</div>
+				<div
+					style={{
+						width: "25px",
+						height: "25px",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						borderRadius: "50%",
+						border: "1px solid #000",
+						margin: "5px",
+						backgroundColor: "gray",
+					}}
+					// onClick={() => toggleMark(index)}
+				>
+					-
+				</div>
 			</div>
 		</div>
 	);

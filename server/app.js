@@ -32,24 +32,26 @@ MongoClient.connect(mongoURI)
         // Authentication route
         app.post('/user/login', (req, res) => {
             const { pin } = req.body;
-            console.log("here", pin);
+            let user;
             if (pin == PIN_1) {
-                const user = {
+                user = {
                     author: "Ishu Mehta",
                 };
                 const token = generateToken(user);
                 res.json({
                     message: 'Authentication successful',
-                    token: token
+                    token: token,
+                    author: user.author
                 });
             } else if (pin == PIN_2) {
-                const user = {
+                user = {
                     author: "Kumar Shubhranshu"
                 };
                 const token = generateToken(user);
                 res.json({
                     message: 'Authentication successful',
-                    token: token
+                    token: token,
+                    author: user.author
                 });
             }
             res.json({
@@ -88,7 +90,6 @@ MongoClient.connect(mongoURI)
         });
 
         app.post('/student', (req, res) => {
-
             try {
                 const token = req.headers.authorization.split(' ')[1];
                 const decoded = jwt.verify(token, SECRET_KEY);
@@ -135,9 +136,7 @@ MongoClient.connect(mongoURI)
 
 const generateToken = (user) => {
     console.log(user);
-    return jwt.sign(user, process.env.SECRET_KEY, {
-        'expiresIn': '4h'
-    });
+    return jwt.sign(user, process.env.SECRET_KEY);
 };
 
 const validateToken = async (token, tokenSecret) => {
