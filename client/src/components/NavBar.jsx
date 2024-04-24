@@ -35,7 +35,7 @@ function NavBar({ auth, setAuth }) {
 
 	const handleLogin = async () => {
 		setLoading(true);
-		const { data } = await axios.post(`http://localhost:5000/user/login`, {
+		const { data } = await axios.post(`${SERVER_URL}/user/login`, {
 			pin,
 		});
 		console.log(data);

@@ -18,8 +18,8 @@ function App() {
 		}
 	}, []);
 	//	const SERVER_URL =
-	//	import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
-	const SERVER_URL = "http://localhost:5000";
+	const SERVER_URL =
+		import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
 	const fetchStudents = async () => {
 		const { data } = await axios.get(`${SERVER_URL}/student`);
 		setStudents(data);
