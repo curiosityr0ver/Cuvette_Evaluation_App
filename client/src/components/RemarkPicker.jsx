@@ -30,6 +30,7 @@ const FruitsSelector = ({
 
 	const addFruit = (fruit) => {
 		setFruits([...fruits, fruit]);
+		setSelectedRemarks([...selectedRemarks, fruit]);
 	};
 
 	return (
@@ -42,6 +43,7 @@ const FruitsSelector = ({
 						cursor="pointer"
 						onClick={() => toggleRemarkSelection(fruit)}
 						mb={2}
+						mr={2}
 					>
 						<TagLeftIcon
 							as={

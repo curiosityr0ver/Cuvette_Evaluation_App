@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-const SubjectMarkingWidget = ({ subjectName, setResults }) => {
+const SubjectMarkingWidget = ({ subjectName, results, setResults }) => {
 	const totalQuestions = 10;
 	const [questionStates, setQuestionStates] = useState(
-		new Array(totalQuestions).fill(0)
+		results?.[subjectName] || new Array(totalQuestions).fill(0)
 	);
 
 	const toggleMark = (index) => {
@@ -15,6 +15,13 @@ const SubjectMarkingWidget = ({ subjectName, setResults }) => {
 			newResults[subjectName] = newQuestionStates;
 			return newResults;
 		});
+	};
+
+	const addQuestion = () => {
+		setQuestionStates([...questionStates, 0]);
+	};
+	const removeQuestion = () => {
+		setQuestionStates(questionStates.slice(0, -1));
 	};
 
 	const getColor = (state) => {
@@ -68,7 +75,7 @@ const SubjectMarkingWidget = ({ subjectName, setResults }) => {
 						margin: "5px",
 						backgroundColor: "gray",
 					}}
-					// onClick={() => toggleMark(index)}
+					onClick={() => addQuestion()}
 				>
 					+
 				</div>
@@ -84,7 +91,7 @@ const SubjectMarkingWidget = ({ subjectName, setResults }) => {
 						margin: "5px",
 						backgroundColor: "gray",
 					}}
-					// onClick={() => toggleMark(index)}
+					onClick={() => removeQuestion()}
 				>
 					-
 				</div>

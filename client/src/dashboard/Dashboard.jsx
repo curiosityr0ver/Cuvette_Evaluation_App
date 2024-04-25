@@ -52,11 +52,11 @@ const Dashboard = ({ students, auth, setAuth }) => {
 						<th>Name</th>
 						<th>Date</th>
 						<th>Interview</th>
-						<th>JS</th>
+						{/* <th>JS</th>
 						<th>React</th>
 						<th>Node-Express</th>
 						<th>Database</th>
-						<th>Total</th>
+						<th>Total</th> */}
 						<th>Remarks</th>
 						<th>Actions</th>
 						<th>Author</th>
@@ -72,11 +72,11 @@ const Dashboard = ({ students, auth, setAuth }) => {
 									{formatDate(student.timestamp)}
 								</td>
 								<td>{student.interview}</td>
-								<td>{reduceScore(student.results?.JavaScript)}</td>
+								{/* <td>{reduceScore(student.results?.JavaScript)}</td>
 								<td>{reduceScore(student.results?.React)}</td>
 								<td>{reduceScore(student.results?.NodeExpress)}</td>
 								<td>{reduceScore(student.results?.Database)}</td>
-								<td>{totalScore(student?.results)}</td>
+								<td>{totalScore(student?.results)}</td> */}
 								<td>{student.remark}</td>
 								<td>
 									<Link to={`/student/view/${student._id}`}>View</Link>

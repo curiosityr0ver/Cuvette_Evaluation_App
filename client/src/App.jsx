@@ -4,27 +4,21 @@ import Dashboard from "./dashboard/Dashboard";
 import ExistingStudent from "./student/ExistingStudent";
 import AddStudent from "./student/AddStudent";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchStudents } from "../api/students";
 
 function App() {
 	const [students, setStudents] = useState();
 	const [auth, setAuth] = useState();
 
 	useEffect(() => {
-		fetchStudents();
+		fetchStudents().then((data) => {
+			setStudents(data);
+		});
 		const token = localStorage.getItem("token");
 		if (token) {
 			setAuth(token);
 		}
 	}, []);
-	//	const SERVER_URL =
-	const SERVER_URL =
-		import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
-	const fetchStudents = async () => {
-		const { data } = await axios.get(`${SERVER_URL}/student`);
-		setStudents(data);
-	};
-
 	return (
 		<BrowserRouter>
 			<Routes>

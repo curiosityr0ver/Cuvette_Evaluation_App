@@ -4,17 +4,15 @@ import {
 	// useEffect
 } from "react";
 import SubjectMarkingWidget from "./SubjectMarkingWidget";
-import axios from "axios";
-import { Input, Textarea, Button, Select } from "@chakra-ui/react";
+import { Input, Button, Select } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
+import { addStudent } from "../../api/students";
 
 const AddStudent = ({ auth }) => {
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
-	const [ctc, setCtc] = useState("Rejected");
 	const [remark, setRemark] = useState([]);
-	const [finalFeedback, setFinalFeedback] = useState("No Feedback");
 	const [loading, setLoading] = useState(false);
 
 	const [fruits, setFruits] = useState([
@@ -35,27 +33,19 @@ const AddStudent = ({ auth }) => {
 			name,
 			interview,
 			results,
-			ctc,
 			remark,
-			finalFeedback,
 			timestamp: date,
 		};
-		//axios
-		// const token = localStorage.getItem("token");
 		console.log(student);
-		const SERVER_URL =
-			import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
-		const { data } = await axios.post(`${SERVER_URL}/student`, student, {
-			headers: {
-				Authorization: "Bearer " + auth,
-			},
+		setLoading(true);
+		addStudent(student, auth).then((data) => {
+			console.log(data);
+			setLoading(false);
 		});
-		console.log(data);
 	};
 
 	return (
 		<div>
-			<h1>Add Student</h1>
 			<div
 				style={{
 					display: "flex",
@@ -67,32 +57,33 @@ const AddStudent = ({ auth }) => {
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
+						justifyContent: "space-around",
 						padding: "0px 1%",
 						backgroundColor: "lightgray",
 						width: "25%",
 						borderRadius: "10px",
 					}}
 				>
-					<label>Name:</label>
 					<Input
 						type="text"
 						value={name}
 						variant={"subtle"}
 						onChange={(e) => setName(e.target.value)}
 						disabled={!auth}
+						placeholder="Student Name"
 					/>
-					<label>Interview:</label>
 					<Select
 						value={interview}
 						variant={"subtle"}
 						onChange={(e) => setInterview(e.target.value)}
 						disabled={!auth}
+						placeholder="Select Interview Type"
 					>
 						<option value="Mock">Mock</option>
 						<option value="Evaluation">Evaluation</option>
 					</Select>
 					<Button mt={"100"} onClick={handleSubmit} disabled={!auth}>
-						Add Student
+						{loading ? "Loading" : "Submit"}
 					</Button>
 				</div>
 				<div
