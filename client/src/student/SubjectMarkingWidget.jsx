@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const SubjectMarkingWidget = ({ subjectName, results, setResults }) => {
-	const totalQuestions = 10;
+	const totalQuestions = 5;
 	const [questionStates, setQuestionStates] = useState(
 		results?.[subjectName] || new Array(totalQuestions).fill(0)
 	);
