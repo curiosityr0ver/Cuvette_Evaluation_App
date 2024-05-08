@@ -7,6 +7,7 @@ import SubjectMarkingWidget from "./SubjectMarkingWidget";
 import { Input, Button, Select } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
 import { addStudent } from "../../api/students";
+import { remarks } from "../../data/Remarks";
 
 const AddStudent = ({ auth }) => {
 	const [name, setName] = useState();
@@ -15,14 +16,7 @@ const AddStudent = ({ auth }) => {
 	const [remark, setRemark] = useState([]);
 	const [loading, setLoading] = useState(false);
 
-	const [fruits, setFruits] = useState([
-		"Who is often considered the greatest writer in the English language and the world's greatest dramatist?",
-		"Which play is known as the 'Scottish Play'?",
-		"In which play does the character Hamlet famously utter the phrase 'To be, or not to be'?",
-		"Who is the famous star-crossed lover in Shakespeare's tragedy 'Romeo and Juliet'?",
-		"Which play features the character Puck and is known for its magical elements?",
-		// Add more questions as needed
-	]);
+	const [fruits, setFruits] = useState(remarks);
 
 	const subjects = ["JavaScript", "React", "NodeExpress", "Database"];
 
