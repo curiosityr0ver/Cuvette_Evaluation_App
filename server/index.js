@@ -8,7 +8,8 @@ app.get('/', (req, res) => {
     res.status(200).send('Hello from Express.js on Vercel!');
 });
 
-app.listen(5000, () => console.log("Server ready on port 5000."));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("Server ready on port 5000."));
 
 
 // Wrap your Express app with serverless
