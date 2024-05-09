@@ -18,10 +18,12 @@ export const addStudent = async (student, auth) => {
 };
 
 export const fetchStudent = async (studentID, auth) => {
+    console.log("here");
     const { data } = await axios.get(`${SERVER_URL}/student/${studentID}`, {
         headers: {
             Authorization: "Bearer " + auth,
         },
     });
+    console.log(data);
     return data;
 };

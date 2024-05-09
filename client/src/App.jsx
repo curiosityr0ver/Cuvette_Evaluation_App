@@ -12,6 +12,7 @@ function App() {
 
 	useEffect(() => {
 		fetchStudents().then((data) => {
+			console.log(data);
 			setStudents(data);
 		});
 		const token = localStorage.getItem("token");
