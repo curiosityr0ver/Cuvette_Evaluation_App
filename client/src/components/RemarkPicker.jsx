@@ -16,9 +16,12 @@ const FruitsSelector = ({
 	setFruits,
 	remarks: selectedRemarks,
 	setRemark: setSelectedRemarks,
+	auth,
 }) => {
+	console.log(auth);
 	const [customFruit, setCustomFruit] = useState();
 	const toggleRemarkSelection = (remark) => {
+		if (!auth) return;
 		if (selectedRemarks.includes(remark)) {
 			setSelectedRemarks(
 				selectedRemarks.filter((selectedRemark) => selectedRemark !== remark)
@@ -29,6 +32,7 @@ const FruitsSelector = ({
 	};
 
 	const addFruit = (fruit) => {
+		if (!auth) return;
 		setFruits([...fruits, fruit]);
 		setSelectedRemarks([...selectedRemarks, fruit]);
 	};
@@ -61,6 +65,7 @@ const FruitsSelector = ({
 				placeholder="Add custom fruit"
 				value={customFruit}
 				onChange={(e) => setCustomFruit(e.target.value)}
+				disabled={!auth}
 				onKeyPress={(e) => {
 					if (e.key === "Enter") {
 						addFruit(customFruit);

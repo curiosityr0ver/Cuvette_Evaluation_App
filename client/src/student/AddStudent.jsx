@@ -14,9 +14,9 @@ const AddStudent = ({ auth }) => {
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
 	const [remark, setRemark] = useState([]);
-	const [loading, setLoading] = useState(false);
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
+	const [loading, setLoading] = useState(false);
 
 	const [fruits, setFruits] = useState(remarks);
 
@@ -146,6 +146,7 @@ const AddStudent = ({ auth }) => {
 						setRemark={setRemark}
 						fruits={fruits}
 						setFruits={setFruits}
+						auth={auth}
 					/>
 				</div>
 			</div>

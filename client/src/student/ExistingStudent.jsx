@@ -1,38 +1,22 @@
 // AddStudent.js
-import {
-	useEffect,
-	useState,
-	// useEffect
-} from "react";
+import { useState, useEffect } from "react";
 import SubjectMarkingWidget from "./SubjectMarkingWidget";
 import { Input, Button, Select } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
+import { addStudent } from "../../api/students";
+import { remarks } from "../../data/Remarks";
 import { fetchStudent } from "../../api/students";
 
-const AddStudent = ({ auth }) => {
+const ExistingStudent = ({ auth }) => {
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
 	const [remark, setRemark] = useState([]);
-	const studentID = window.location.href.split("/")[5];
-	const [fruits, setFruits] = useState([
-		"Who is often considered the greatest writer in the English language and the world's greatest dramatist?",
-		"Which play is known as the 'Scottish Play'?",
-		"In which play does the character Hamlet famously utter the phrase 'To be, or not to be'?",
-		"Who is the famous star-crossed lover in Shakespeare's tragedy 'Romeo and Juliet'?",
-		"Which play features the character Puck and is known for its magical elements?",
-		// Add more questions as needed
-	]);
+	const [communication, setCommunication] = useState();
+	const [explaination, setExplaination] = useState();
+	const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		fetchStudent(studentID, auth).then((data) => {
-			console.log(data);
-			setName(data.name);
-			setInterview(data.interview);
-			setResults(data.results);
-			setRemark(data.remark);
-		});
-	}, []);
+	const [fruits, setFruits] = useState(remarks);
 
 	const subjects = ["JavaScript", "React", "NodeExpress", "Database"];
 
@@ -44,9 +28,29 @@ const AddStudent = ({ auth }) => {
 			interview,
 			results,
 			remark,
+			communication,
+			explaination,
 			timestamp: date,
 		};
+		console.log(student);
+		setLoading(true);
+		addStudent(student, auth).then((data) => {
+			console.log(data);
+			setLoading(false);
+		});
 	};
+	useEffect(() => {
+		const studentID = window.location.href.split("/")[5];
+		fetchStudent(studentID, auth).then((data) => {
+			console.log(data);
+			setName(data.name);
+			setInterview(data.interview);
+			setResults(data.results);
+			setCommunication(data.communication);
+			setExplaination(data.explaination);
+			setRemark(data.remark);
+		});
+	}, []);
 
 	return (
 		<div>
@@ -73,22 +77,41 @@ const AddStudent = ({ auth }) => {
 						value={name}
 						variant={"subtle"}
 						onChange={(e) => setName(e.target.value)}
-						disabled={!auth}
+						disabled
 						placeholder="Student Name"
 					/>
 					<Select
 						value={interview}
 						variant={"subtle"}
 						onChange={(e) => setInterview(e.target.value)}
-						disabled={!auth}
+						disabled
 						placeholder="Select Interview Type"
 					>
 						<option value="Mock">Mock</option>
 						<option value="Evaluation">Evaluation</option>
 					</Select>
-					<Button mt={"100"} onClick={handleSubmit} disabled={!auth}>
-						Add Student
-					</Button>
+					<Select
+						value={communication}
+						variant={"subtle"}
+						onChange={(e) => setCommunication(e.target.value)}
+						disabled
+						placeholder="Communication"
+					>
+						<option value="Fluent">Fluent</option>
+						<option value="Mid">Mid</option>
+						<option value="Below Avg">Below Avg</option>
+					</Select>
+					<Select
+						value={explaination}
+						variant={"subtle"}
+						onChange={(e) => setExplaination(e.target.value)}
+						disabled
+						placeholder="Explaination"
+					>
+						<option value="Excellent">Excellent</option>
+						<option value="Good">Good</option>
+						<option value="Below Avg">Below Avg</option>
+					</Select>
 				</div>
 				<div
 					style={{
@@ -104,14 +127,12 @@ const AddStudent = ({ auth }) => {
 				>
 					{subjects.map((subject, index) => (
 						<div key={index}>
-							{results && (
-								<SubjectMarkingWidget
-									subjectName={subject}
-									results={results}
-									setResults={setResults}
-									auth={auth}
-								/>
-							)}
+							<SubjectMarkingWidget
+								subjectName={subject}
+								results={results?.[subject] || []}
+								setResults={setResults}
+								auth={false}
+							/>
 						</div>
 					))}
 				</div>
@@ -133,6 +154,7 @@ const AddStudent = ({ auth }) => {
 						setRemark={setRemark}
 						fruits={fruits}
 						setFruits={setFruits}
+						auth={false}
 					/>
 				</div>
 			</div>
@@ -140,4 +162,4 @@ const AddStudent = ({ auth }) => {
 	);
 };
 
-export default AddStudent;
+export default ExistingStudent;

@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const SubjectMarkingWidget = ({ subjectName, results, setResults }) => {
+const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 	const totalQuestions = 5;
 	const [questionStates, setQuestionStates] = useState(
-		results?.[subjectName] || new Array(totalQuestions).fill(0)
+		new Array(totalQuestions).fill(0)
 	);
 
+	useEffect(() => {
+		if (results) {
+			setQuestionStates(results);
+		}
+	}, [results]);
+
 	const toggleMark = (index) => {
+		if (!auth) return;
 		const newQuestionStates = [...questionStates];
 		newQuestionStates[index] = (newQuestionStates[index] + 1) % 4; // Cycle through 0, 1, 2, 3
 		setQuestionStates(newQuestionStates);
@@ -18,10 +25,10 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults }) => {
 	};
 
 	const addQuestion = () => {
-		setQuestionStates([...questionStates, 0]);
+		if (auth) setQuestionStates([...questionStates, 0]);
 	};
 	const removeQuestion = () => {
-		setQuestionStates(questionStates.slice(0, -1));
+		if (auth) setQuestionStates(questionStates.slice(0, -1));
 	};
 
 	const getColor = (state) => {

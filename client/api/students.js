@@ -24,6 +24,5 @@ export const fetchStudent = async (studentID, auth) => {
             Authorization: "Bearer " + auth,
         },
     });
-    console.log(data);
     return data;
 };
