@@ -15,6 +15,8 @@ const AddStudent = ({ auth }) => {
 	const [results, setResults] = useState();
 	const [remark, setRemark] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [communication, setCommunication] = useState();
+	const [explaination, setExplaination] = useState();
 
 	const [fruits, setFruits] = useState(remarks);
 
@@ -28,6 +30,8 @@ const AddStudent = ({ auth }) => {
 			interview,
 			results,
 			remark,
+			communication,
+			explaination,
 			timestamp: date,
 		};
 		console.log(student);
@@ -75,6 +79,28 @@ const AddStudent = ({ auth }) => {
 					>
 						<option value="Mock">Mock</option>
 						<option value="Evaluation">Evaluation</option>
+					</Select>
+					<Select
+						value={communication}
+						variant={"subtle"}
+						onChange={(e) => setCommunication(e.target.value)}
+						disabled={!auth}
+						placeholder="Communication"
+					>
+						<option value="Fluent">Fluent</option>
+						<option value="Mid">Mid</option>
+						<option value="Below Avg">Below Avg</option>
+					</Select>
+					<Select
+						value={explaination}
+						variant={"subtle"}
+						onChange={(e) => setExplaination(e.target.value)}
+						disabled={!auth}
+						placeholder="Explaination"
+					>
+						<option value="Excellent">Excellent</option>
+						<option value="Good">Good</option>
+						<option value="Below Avg">Below Avg</option>
 					</Select>
 					<Button mt={"100"} onClick={handleSubmit} disabled={!auth}>
 						{loading ? "Loading" : "Submit"}
