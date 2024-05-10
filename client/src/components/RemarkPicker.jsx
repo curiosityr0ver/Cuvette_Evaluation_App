@@ -62,7 +62,7 @@ const FruitsSelector = ({
 				</Tooltip>
 			))}
 			<Input
-				placeholder="Add custom fruit"
+				placeholder="Add custom remark"
 				value={customFruit}
 				onChange={(e) => setCustomFruit(e.target.value)}
 				disabled={!auth}

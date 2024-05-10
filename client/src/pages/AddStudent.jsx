@@ -1,7 +1,16 @@
 // AddStudent.js
 import { useState, useEffect, useContext } from "react";
 import SubjectMarkingWidget from "../components/SubjectMarkingWidget";
-import { Input, Button, Select } from "@chakra-ui/react";
+import {
+	Input,
+	Button,
+	Select,
+	Stack,
+	Radio,
+	RadioGroup,
+	Text,
+	Flex,
+} from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
 import { addStudent } from "../../api/students";
 import { remarks } from "../../data/Remarks";
@@ -52,6 +61,7 @@ const AddStudent = () => {
 				style={{
 					display: "flex",
 					width: "100vw",
+					padding: "4px",
 				}}
 			>
 				<div
@@ -60,9 +70,9 @@ const AddStudent = () => {
 						flexDirection: "column",
 						alignItems: "center",
 						justifyContent: "space-around",
-						padding: "0px 1%",
+						padding: "12px",
 						backgroundColor: "lightgray",
-						width: "25%",
+						width: "35%",
 						borderRadius: "10px",
 					}}
 				>
@@ -74,38 +84,81 @@ const AddStudent = () => {
 						disabled={!auth}
 						placeholder="Student Name"
 					/>
-					<Select
+					<RadioGroup
+						defaultValue="Evaluation"
 						value={interview}
-						variant={"subtle"}
-						onChange={(e) => setInterview(e.target.value)}
+						onChange={(val) => setInterview(val)}
 						disabled={!auth}
-						placeholder="Select Interview Type"
 					>
-						<option value="Evaluation">Evaluation</option>
-						<option value="Mock">Mock</option>
-					</Select>
-					<Select
+						<Stack
+							spacing={5}
+							direction="row"
+							bg="gray.50"
+							p={4}
+							borderRadius="lg"
+							m={4}
+						>
+							<Text fontWeight={600}>Interview: </Text>
+							<Radio colorScheme="green" value="Evaluation">
+								Evaluation
+							</Radio>
+							<Radio colorScheme="green" value="Mock">
+								Mock
+							</Radio>
+						</Stack>
+					</RadioGroup>
+					<RadioGroup
+						defaultValue="Good"
 						value={communication}
-						variant={"subtle"}
-						onChange={(e) => setCommunication(e.target.value)}
+						onChange={(val) => setCommunication(val)}
 						disabled={!auth}
-						placeholder="Communication"
 					>
-						<option value="Good">Good</option>
-						<option value="Mid">Avg</option>
-						<option value="Below Avg">Below Avg</option>
-					</Select>
-					<Select
+						<Stack
+							spacing={5}
+							direction="row"
+							bg="gray.50"
+							p={4}
+							borderRadius="lg"
+							mb={4}
+						>
+							<Text fontWeight={600}>Communication: </Text>
+							<Radio colorScheme="green" value="Good">
+								Good
+							</Radio>
+							<Radio colorScheme="green" value="Avg">
+								Avg
+							</Radio>
+							<Radio colorScheme="green" value="Below Avg">
+								Below Avg
+							</Radio>
+						</Stack>
+					</RadioGroup>
+					<RadioGroup
+						defaultValue="Good"
 						value={explaination}
-						variant={"subtle"}
-						onChange={(e) => setExplaination(e.target.value)}
+						onChange={(val) => setExplaination(val)}
 						disabled={!auth}
-						placeholder="Explaination"
 					>
-						<option value="Good">Good</option>
-						<option value="Mid">Avg</option>
-						<option value="Below Avg">Below Avg</option>
-					</Select>
+						<Stack
+							spacing={5}
+							direction="row"
+							bg="gray.50"
+							p={4}
+							borderRadius="lg"
+						>
+							<Text fontWeight={600}>Explaination: </Text>
+							<Radio colorScheme="green" value="Good">
+								Good
+							</Radio>
+							<Radio colorScheme="green" value="Avg">
+								Avg
+							</Radio>
+							<Radio colorScheme="green" value="Below Avg">
+								Below Avg
+							</Radio>
+						</Stack>
+					</RadioGroup>
+
 					<Button mt={"100"} onClick={handleSubmit} disabled={!auth}>
 						{loading ? "Loading" : "Submit"}
 					</Button>
