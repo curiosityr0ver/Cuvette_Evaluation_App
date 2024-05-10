@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const verifyToken = require('./middleware/auth');
 require('dotenv').config(); // will config the .env file present in the directory
 
 
@@ -38,7 +39,7 @@ MongoClient.connect(mongoURI)
                     author: "Ishu Mehta",
                 };
                 const token = generateToken(user);
-                res.json({
+                return res.json({
                     message: 'Authentication successful',
                     token: token,
                     author: user.author
@@ -48,13 +49,13 @@ MongoClient.connect(mongoURI)
                     author: "Kumar Shubhranshu"
                 };
                 const token = generateToken(user);
-                res.json({
+                return res.json({
                     message: 'Authentication successful',
                     token: token,
                     author: user.author
                 });
             }
-            res.json({
+            return res.json({
                 message: 'Authentication failed',
             });
         });
@@ -89,13 +90,14 @@ MongoClient.connect(mongoURI)
                 .catch(err => console.error(err));
         });
 
-        app.post('/student', (req, res) => {
+        app.post('/student', verifyToken, (req, res) => {
             try {
-                const token = req.headers.authorization.split(' ')[1];
-                const decoded = jwt.verify(token, SECRET_KEY);
-                const newStudent = { ...req.body };
-                newStudent.timestamp = new Date();
-                newStudent.author = decoded.author;
+                const newStudent = {
+                    ...req.body,
+                    timestamp: new Date(),
+                    author: req.author,
+                };
+                console.log(newStudent);
                 studentsCollection.insertOne(newStudent)
                     .then(result => {
                         studentsCollection.find({}).toArray()
@@ -111,9 +113,14 @@ MongoClient.connect(mongoURI)
 
         app.put('/student/:id', (req, res) => {
             const id = req.params.id;
+            var ObjectId = require('mongodb').ObjectId;
+            const query = { _id: new ObjectId(req.params.id) };
             const updatedStudent = req.body;
-            studentsCollection.updateOne({ _id: id }, { $set: updatedStudent })
-                .then(result => res.json({ message: 'Student updated successfully' }))
+            studentsCollection.updateOne(query, { $set: updatedStudent })
+                .then(result => {
+                    console.log(result);
+                    res.json({ message: 'Student updated successfully' });
+                })
                 .catch(err => console.error(err));
         });
 

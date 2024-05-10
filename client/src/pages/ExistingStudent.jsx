@@ -1,15 +1,13 @@
 // AddStudent.js
-import {
-	useState,
-	// useEffect
-} from "react";
-import SubjectMarkingWidget from "./SubjectMarkingWidget";
-import { Input, Button, Select } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import SubjectMarkingWidget from "../components/SubjectMarkingWidget";
+import { Input, Select, Button } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
-import { addStudent } from "../../api/students";
+import { addStudent, updateStudent } from "../../api/students";
 import { remarks } from "../../data/Remarks";
+import { fetchStudent } from "../../api/students";
 
-const AddStudent = ({ auth }) => {
+const ExistingStudent = ({ auth }) => {
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
@@ -17,8 +15,8 @@ const AddStudent = ({ auth }) => {
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
 	const [loading, setLoading] = useState(false);
-
 	const [fruits, setFruits] = useState(remarks);
+	const studentID = window.location.href.split("/")[5];
 
 	const subjects = ["JavaScript", "React", "NodeExpress", "Database"];
 
@@ -36,11 +34,23 @@ const AddStudent = ({ auth }) => {
 		};
 		console.log(student);
 		setLoading(true);
-		addStudent(student, auth).then((data) => {
+		updateStudent(studentID, student, auth).then((data) => {
 			console.log(data);
 			setLoading(false);
 		});
 	};
+	useEffect(() => {
+		console.log(auth);
+
+		fetchStudent(studentID, auth).then((data) => {
+			setName(data.name);
+			setInterview(data.interview);
+			setResults(data.results);
+			setCommunication(data.communication);
+			setExplaination(data.explaination);
+			setRemark(data.remark);
+		});
+	}, []);
 
 	return (
 		<div>
@@ -67,7 +77,7 @@ const AddStudent = ({ auth }) => {
 						value={name}
 						variant={"subtle"}
 						onChange={(e) => setName(e.target.value)}
-						disabled={!auth}
+						disabled
 						placeholder="Student Name"
 					/>
 					<Select
@@ -122,8 +132,9 @@ const AddStudent = ({ auth }) => {
 						<div key={index}>
 							<SubjectMarkingWidget
 								subjectName={subject}
+								results={results?.[subject] || []}
 								setResults={setResults}
-								auth={auth}
+								auth={false}
 							/>
 						</div>
 					))}
@@ -154,4 +165,4 @@ const AddStudent = ({ auth }) => {
 	);
 };
 
-export default AddStudent;
+export default ExistingStudent;

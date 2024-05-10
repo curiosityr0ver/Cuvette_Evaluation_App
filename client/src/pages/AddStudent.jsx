@@ -1,13 +1,13 @@
 // AddStudent.js
-import { useState, useEffect } from "react";
-import SubjectMarkingWidget from "./SubjectMarkingWidget";
+import { useState, useEffect, useContext } from "react";
+import SubjectMarkingWidget from "../components/SubjectMarkingWidget";
 import { Input, Button, Select } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
 import { addStudent } from "../../api/students";
 import { remarks } from "../../data/Remarks";
-import { fetchStudent } from "../../api/students";
+import { UserContext } from "../context/UserContext";
 
-const ExistingStudent = ({ auth }) => {
+const AddStudent = () => {
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Mock");
 	const [results, setResults] = useState();
@@ -15,6 +15,7 @@ const ExistingStudent = ({ auth }) => {
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
 	const [loading, setLoading] = useState(false);
+	const { auth, getAuth } = useContext(UserContext);
 
 	const [fruits, setFruits] = useState(remarks);
 
@@ -39,19 +40,12 @@ const ExistingStudent = ({ auth }) => {
 			setLoading(false);
 		});
 	};
-	useEffect(() => {
-		const studentID = window.location.href.split("/")[5];
-		fetchStudent(studentID, auth).then((data) => {
-			console.log(data);
-			setName(data.name);
-			setInterview(data.interview);
-			setResults(data.results);
-			setCommunication(data.communication);
-			setExplaination(data.explaination);
-			setRemark(data.remark);
-		});
-	}, []);
 
+	useEffect(() => {
+		if (!auth) {
+			getAuth();
+		}
+	}, []);
 	return (
 		<div>
 			<div
@@ -77,14 +71,14 @@ const ExistingStudent = ({ auth }) => {
 						value={name}
 						variant={"subtle"}
 						onChange={(e) => setName(e.target.value)}
-						disabled
+						disabled={!auth}
 						placeholder="Student Name"
 					/>
 					<Select
 						value={interview}
 						variant={"subtle"}
 						onChange={(e) => setInterview(e.target.value)}
-						disabled
+						disabled={!auth}
 						placeholder="Select Interview Type"
 					>
 						<option value="Mock">Mock</option>
@@ -94,7 +88,7 @@ const ExistingStudent = ({ auth }) => {
 						value={communication}
 						variant={"subtle"}
 						onChange={(e) => setCommunication(e.target.value)}
-						disabled
+						disabled={!auth}
 						placeholder="Communication"
 					>
 						<option value="Fluent">Fluent</option>
@@ -105,13 +99,16 @@ const ExistingStudent = ({ auth }) => {
 						value={explaination}
 						variant={"subtle"}
 						onChange={(e) => setExplaination(e.target.value)}
-						disabled
+						disabled={!auth}
 						placeholder="Explaination"
 					>
 						<option value="Excellent">Excellent</option>
 						<option value="Good">Good</option>
 						<option value="Below Avg">Below Avg</option>
 					</Select>
+					<Button mt={"100"} onClick={handleSubmit} disabled={!auth}>
+						{loading ? "Loading" : "Submit"}
+					</Button>
 				</div>
 				<div
 					style={{
@@ -129,9 +126,8 @@ const ExistingStudent = ({ auth }) => {
 						<div key={index}>
 							<SubjectMarkingWidget
 								subjectName={subject}
-								results={results?.[subject] || []}
 								setResults={setResults}
-								auth={false}
+								auth={auth}
 							/>
 						</div>
 					))}
@@ -154,7 +150,7 @@ const ExistingStudent = ({ auth }) => {
 						setRemark={setRemark}
 						fruits={fruits}
 						setFruits={setFruits}
-						auth={false}
+						auth={auth}
 					/>
 				</div>
 			</div>
@@ -162,4 +158,4 @@ const ExistingStudent = ({ auth }) => {
 	);
 };
 
-export default ExistingStudent;
+export default AddStudent;

@@ -1,20 +1,22 @@
 // App.js
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./dashboard/Dashboard";
-import ExistingStudent from "./student/ExistingStudent";
-import AddStudent from "./student/AddStudent";
-import { useEffect, useState } from "react";
+import ExistingStudent from "./pages/ExistingStudent";
+import AddStudent from "./pages/AddStudent";
+import { useEffect, useState, useContext } from "react";
 import { fetchStudents } from "../api/students";
+import { UserContext } from "./context/UserContext";
 
 function App() {
 	const [students, setStudents] = useState();
-	const [auth, setAuth] = useState();
-
+	// const [auth, setAuth] = useState();
+	const { auth, getAuth, setAuth } = useContext(UserContext);
 	useEffect(() => {
 		fetchStudents().then((data) => {
 			console.log(data);
 			setStudents(data);
 		});
+		console.log(getAuth());
 		const token = localStorage.getItem("token");
 		if (token) {
 			setAuth(token);

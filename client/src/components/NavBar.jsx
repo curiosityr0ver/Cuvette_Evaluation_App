@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import styles from "./NavBar.module.css";
 import { Button, Input } from "@chakra-ui/react";
+import { login } from "../../api/students";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
-const SERVER_URL =
-	import.meta.env.VITE_APP_SERVER_URL || "http://localhost:5000";
-
-function NavBar({ auth, setAuth }) {
+function NavBar() {
 	const [pin, setPin] = useState();
 	const [loading, setLoading] = useState(false);
 	const [currentUser, setcurrentUser] = useState("Guest");
+	const { auth, setAuth } = useContext(UserContext);
 
 	const userStyle = {
 		color:
@@ -35,19 +35,23 @@ function NavBar({ auth, setAuth }) {
 
 	const handleLogin = async () => {
 		setLoading(true);
-		const { data } = await axios.post(`${SERVER_URL}/user/login`, {
-			pin,
-		});
-		console.log(data);
+		const { data } = await login(pin);
 		setLoading(false);
 		if (data.token) {
-			localStorage.setItem("token", data.token);
 			setAuth(data.token);
+			console.log(data.token);
+			localStorage.setItem("author", data.author);
 			setcurrentUser(data.author);
 		} else {
 			alert("Invalid PIN");
 		}
 	};
+	useEffect(() => {
+		const author = localStorage.getItem("author");
+		if (author) {
+			setcurrentUser(author);
+		}
+	}, []);
 
 	return (
 		<div className={styles.auth}>
