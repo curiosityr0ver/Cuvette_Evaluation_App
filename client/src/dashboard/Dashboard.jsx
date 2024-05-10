@@ -1,11 +1,13 @@
 // Dashboard.js
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./Dashboard.module.css";
 import NavBar from "../components/NavBar";
+import { Button } from "@chakra-ui/react";
 
 const Dashboard = ({ students, auth, setAuth }) => {
 	const [loading, setLoading] = useState(true);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (students) {
@@ -79,8 +81,16 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td>{totalScore(student?.results)}</td> */}
 								<td>{student.remark}</td>
 								<td>
-									<Link to={`/student/view/${student._id}`}>View</Link>
-									<Link to={`/student/edit/${student._id}`}>Edit</Link>
+									<Button
+										onClick={() => navigate(`/student/view/${student._id}`)}
+									>
+										View
+									</Button>
+									<Button
+										onClick={() => navigate(`/student/edit/${student._id}`)}
+									>
+										Edit
+									</Button>
 								</td>
 								<td>{student?.author}</td>
 							</tr>

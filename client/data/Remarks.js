@@ -3,7 +3,8 @@ export const remarks = [
     "Lack of Depth",
     "Lack of Clarity",
     "Short introduction",
-    "Weird background",
     "Too quick to skip questions",
+    "One liner answers",
+    "Less points in explaining differences"
     // Add more questions as needed
 ];

@@ -9,7 +9,7 @@ import { UserContext } from "../context/UserContext";
 
 const AddStudent = () => {
 	const [name, setName] = useState();
-	const [interview, setInterview] = useState("Mock");
+	const [interview, setInterview] = useState("Evaluation");
 	const [results, setResults] = useState();
 	const [remark, setRemark] = useState([]);
 	const [communication, setCommunication] = useState();
@@ -81,8 +81,8 @@ const AddStudent = () => {
 						disabled={!auth}
 						placeholder="Select Interview Type"
 					>
-						<option value="Mock">Mock</option>
 						<option value="Evaluation">Evaluation</option>
+						<option value="Mock">Mock</option>
 					</Select>
 					<Select
 						value={communication}
@@ -91,8 +91,8 @@ const AddStudent = () => {
 						disabled={!auth}
 						placeholder="Communication"
 					>
-						<option value="Fluent">Fluent</option>
-						<option value="Mid">Mid</option>
+						<option value="Good">Good</option>
+						<option value="Mid">Avg</option>
 						<option value="Below Avg">Below Avg</option>
 					</Select>
 					<Select
@@ -102,8 +102,8 @@ const AddStudent = () => {
 						disabled={!auth}
 						placeholder="Explaination"
 					>
-						<option value="Excellent">Excellent</option>
 						<option value="Good">Good</option>
+						<option value="Mid">Avg</option>
 						<option value="Below Avg">Below Avg</option>
 					</Select>
 					<Button mt={"100"} onClick={handleSubmit} disabled={!auth}>

@@ -48,7 +48,7 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 			<h2>{subjectName}</h2>
 			<p>
 				Correct Questions: {correctCount + partiallyCorrectCount * 0.5} /{" "}
-				{totalQuestions}
+				{questionStates.length}
 			</p>
 			<div style={{ display: "flex", flexWrap: "wrap" }}>
 				{questionStates.map((state, index) => (
@@ -64,10 +64,11 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 							border: "1px solid #000",
 							margin: "5px",
 							backgroundColor: getColor(state),
+							cursor: auth ? "pointer" : "default",
 						}}
 						onClick={() => toggleMark(index)}
 					>
-						{index}
+						{index + 1}
 					</div>
 				))}
 				<div
