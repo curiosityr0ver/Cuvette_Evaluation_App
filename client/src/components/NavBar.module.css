@@ -2,11 +2,13 @@
     width: 100%;
     box-sizing: border-box;
     padding: 8px;
-    padding-left: 60%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    background-color: #f5f5f5;
+    justify-content: space-between;
+}
+
+.auth div {
+    display: flex;
 }
 
 .user {
