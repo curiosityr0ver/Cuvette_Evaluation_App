@@ -15,6 +15,11 @@ import RemarkPicker from "../components/RemarkPicker";
 import { addStudent } from "../../api/students";
 import { remarks } from "../../data/Remarks";
 import { UserContext } from "../context/UserContext";
+import { interviewOptions } from "../../data/options";
+import { communicationOptions } from "../../data/options";
+import { explainationOptions } from "../../data/options";
+import { fetchStudent } from "../../api/students";
+import { useNavigate } from "react-router-dom";
 
 const AddStudent = () => {
 	const [name, setName] = useState();
@@ -25,6 +30,9 @@ const AddStudent = () => {
 	const [explaination, setExplaination] = useState();
 	const [loading, setLoading] = useState(false);
 	const { auth, getAuth } = useContext(UserContext);
+	const type = window.location.href.split("/")[4];
+	const disabled = type === "view" ? true : false;
+	const navigate = useNavigate();
 
 	const [fruits, setFruits] = useState(remarks);
 
@@ -47,12 +55,24 @@ const AddStudent = () => {
 		addStudent(student, auth).then((data) => {
 			console.log(data);
 			setLoading(false);
+			alert("Student Added Successfully");
 		});
 	};
 
 	useEffect(() => {
 		if (!auth) {
 			getAuth();
+		}
+		if (type === "view" || (type === "edit" && auth)) {
+			const studentID = window.location.href.split("/")[5];
+			fetchStudent(studentID, auth).then((data) => {
+				setName(data.name);
+				setInterview(data.interview);
+				setResults(data.results);
+				setCommunication(data.communication);
+				setExplaination(data.explaination);
+				setRemark(data.remark);
+			});
 		}
 	}, []);
 	return (
@@ -81,14 +101,14 @@ const AddStudent = () => {
 						value={name}
 						variant={"subtle"}
 						onChange={(e) => setName(e.target.value)}
-						disabled={!auth}
+						disabled={disabled}
 						placeholder="Student Name"
 					/>
 					<RadioGroup
 						defaultValue="Evaluation"
 						value={interview}
 						onChange={(val) => setInterview(val)}
-						disabled={!auth}
+						isDisabled={disabled}
 					>
 						<Stack
 							spacing={5}
@@ -99,19 +119,18 @@ const AddStudent = () => {
 							m={4}
 						>
 							<Text fontWeight={600}>Interview: </Text>
-							<Radio colorScheme="green" value="Evaluation">
-								Evaluation
-							</Radio>
-							<Radio colorScheme="green" value="Mock">
-								Mock
-							</Radio>
+							{interviewOptions.map((option, index) => (
+								<Radio key={index} colorScheme="green" value={option}>
+									{option}
+								</Radio>
+							))}
 						</Stack>
 					</RadioGroup>
 					<RadioGroup
 						defaultValue="Good"
 						value={communication}
 						onChange={(val) => setCommunication(val)}
-						disabled={!auth}
+						isDisabled={disabled}
 					>
 						<Stack
 							spacing={5}
@@ -122,22 +141,18 @@ const AddStudent = () => {
 							mb={4}
 						>
 							<Text fontWeight={600}>Communication: </Text>
-							<Radio colorScheme="green" value="Good">
-								Good
-							</Radio>
-							<Radio colorScheme="green" value="Avg">
-								Avg
-							</Radio>
-							<Radio colorScheme="green" value="Below Avg">
-								Below Avg
-							</Radio>
+							{communicationOptions.map((option, index) => (
+								<Radio key={index} colorScheme="green" value={option}>
+									{option}
+								</Radio>
+							))}
 						</Stack>
 					</RadioGroup>
 					<RadioGroup
 						defaultValue="Good"
 						value={explaination}
 						onChange={(val) => setExplaination(val)}
-						disabled={!auth}
+						isDisabled={disabled}
 					>
 						<Stack
 							spacing={5}
@@ -147,21 +162,29 @@ const AddStudent = () => {
 							borderRadius="lg"
 						>
 							<Text fontWeight={600}>Explaination: </Text>
-							<Radio colorScheme="green" value="Good">
-								Good
-							</Radio>
-							<Radio colorScheme="green" value="Avg">
-								Avg
-							</Radio>
-							<Radio colorScheme="green" value="Below Avg">
-								Below Avg
-							</Radio>
+							{explainationOptions.map((option, index) => (
+								<Radio key={index} colorScheme="green" value={option}>
+									{option}
+								</Radio>
+							))}
 						</Stack>
 					</RadioGroup>
-
-					<Button mt={"100"} onClick={handleSubmit} disabled={!auth}>
-						{loading ? "Loading" : "Submit"}
-					</Button>
+					<div display="flex">
+						<Button
+							mt={"25"}
+							onClick={handleSubmit}
+							isDisabled={loading || disabled}
+						>
+							{loading ? "Loading" : "Submit"}
+						</Button>
+						<Button
+							mt={"25"}
+							onClick={() => navigate("/")}
+							isDisabled={loading}
+						>
+							Home
+						</Button>
+					</div>
 				</div>
 				<div
 					style={{
@@ -204,6 +227,7 @@ const AddStudent = () => {
 						fruits={fruits}
 						setFruits={setFruits}
 						auth={auth}
+						disabled={disabled}
 					/>
 				</div>
 			</div>

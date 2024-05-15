@@ -18,7 +18,6 @@ const FruitsSelector = ({
 	setRemark: setSelectedRemarks,
 	auth,
 }) => {
-	console.log(auth);
 	const [customFruit, setCustomFruit] = useState();
 	const toggleRemarkSelection = (remark) => {
 		if (!auth) return;
