@@ -90,26 +90,28 @@ MongoClient.connect(mongoURI)
                 .catch(err => console.error(err));
         });
 
-        app.post('/student', verifyToken, (req, res) => {
-            try {
-                const newStudent = {
-                    ...req.body,
-                    timestamp: new Date(),
-                    author: req.author,
-                };
-                console.log(newStudent);
-                studentsCollection.insertOne(newStudent)
-                    .then(result => {
-                        studentsCollection.find({}).toArray()
-                            .then(students => res.status(201).json({ message: 'Student added successfully', students }))
-                            .catch(err => console.error(err));
-                    })
-                    .catch(err => console.error(err));
-            } catch (error) {
-                console.log(error);
-                res.status(401).json({ message: 'Invalid Authorization' });
-            }
-        });
+        app.post('/student',
+            // verifyToken,
+            (req, res) => {
+                try {
+                    const newStudent = {
+                        ...req.body,
+                        timestamp: new Date(),
+                        author: req.author,
+                    };
+                    console.log(newStudent);
+                    studentsCollection.insertOne(newStudent)
+                        .then(result => {
+                            studentsCollection.find({}).toArray()
+                                .then(students => res.status(201).json({ message: 'Student added successfully', students }))
+                                .catch(err => console.error(err));
+                        })
+                        .catch(err => console.error(err));
+                } catch (error) {
+                    console.log(error);
+                    res.status(401).json({ message: 'Invalid Authorization' });
+                }
+            });
 
         app.put('/student/:id', (req, res) => {
             const id = req.params.id;

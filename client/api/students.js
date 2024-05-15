@@ -17,6 +17,7 @@ export const fetchStudents = async () => {
 };
 
 export const addStudent = async (student, auth) => {
+
     const { data } = await axios.post(`${SERVER_URL}/student`, student, {
         headers: {
             Authorization: "Bearer " + auth,
