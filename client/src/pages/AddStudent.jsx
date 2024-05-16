@@ -4,40 +4,34 @@ import SubjectMarkingWidget from "../components/SubjectMarkingWidget";
 import {
 	Input,
 	Button,
-	Select,
 	Stack,
 	Radio,
 	RadioGroup,
 	Text,
-	Flex,
 } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
 import { addStudent } from "../../api/students";
-import { remarks } from "../../data/Remarks";
 import { UserContext } from "../context/UserContext";
 import { interviewOptions } from "../../data/options";
 import { communicationOptions } from "../../data/options";
 import { explainationOptions } from "../../data/options";
 import { fetchStudent } from "../../api/students";
 import { useNavigate } from "react-router-dom";
+import { remarks } from "../../data/Remarks";
 
-const AddStudent = () => {
+const AddStudent = ({ type }) => {
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Evaluation");
 	const [results, setResults] = useState();
-	const [remark, setRemark] = useState([]);
+	const [allRemarks, setAllRemarks] = useState(remarks);
+	const [selectedRemarks, setSelectedRemarks] = useState([]);
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
 	const [loading, setLoading] = useState(false);
 	const { auth, getAuth } = useContext(UserContext);
-	const type = window.location.href.split("/")[4];
-	const disabled = type === "view" ? true : false;
 	const navigate = useNavigate();
 
-	const [fruits, setFruits] = useState(remarks);
-
 	const subjects = ["JavaScript", "React", "NodeExpress", "Database"];
-
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const date = new Date();
@@ -45,12 +39,11 @@ const AddStudent = () => {
 			name,
 			interview,
 			results,
-			remark,
+			remark: selectedRemarks,
 			communication,
 			explaination,
 			timestamp: date,
 		};
-		console.log(student);
 		setLoading(true);
 		addStudent(student, auth).then((data) => {
 			console.log(data);
@@ -63,18 +56,34 @@ const AddStudent = () => {
 		if (!auth) {
 			getAuth();
 		}
-		if (type === "view" || (type === "edit" && auth)) {
+		if ((type === "edit" || type == "new") && !auth) {
+			navigate("/");
+		}
+		if (type === "view" || type === "edit") {
 			const studentID = window.location.href.split("/")[5];
 			fetchStudent(studentID, auth).then((data) => {
+				console.log(data);
 				setName(data.name);
 				setInterview(data.interview);
 				setResults(data.results);
 				setCommunication(data.communication);
 				setExplaination(data.explaination);
-				setRemark(data.remark);
+				setSelectedRemarks(data.remark);
+				data.remark.forEach((remark) => {
+					if (!allRemarks.includes(remark)) {
+						setAllRemarks([...allRemarks, remark]);
+					}
+				});
 			});
 		}
 	}, []);
+
+	const disabled = () => {
+		if (type === "view" || loading) {
+			return true;
+		}
+		return false;
+	};
 	return (
 		<div>
 			<div
@@ -101,14 +110,14 @@ const AddStudent = () => {
 						value={name}
 						variant={"subtle"}
 						onChange={(e) => setName(e.target.value)}
-						disabled={disabled}
+						disabled={disabled()}
 						placeholder="Student Name"
 					/>
 					<RadioGroup
 						defaultValue="Evaluation"
 						value={interview}
 						onChange={(val) => setInterview(val)}
-						isDisabled={disabled}
+						isDisabled={disabled()}
 					>
 						<Stack
 							spacing={5}
@@ -130,7 +139,7 @@ const AddStudent = () => {
 						defaultValue="Good"
 						value={communication}
 						onChange={(val) => setCommunication(val)}
-						isDisabled={disabled}
+						isDisabled={disabled()}
 					>
 						<Stack
 							spacing={5}
@@ -152,7 +161,7 @@ const AddStudent = () => {
 						defaultValue="Good"
 						value={explaination}
 						onChange={(val) => setExplaination(val)}
-						isDisabled={disabled}
+						isDisabled={disabled()}
 					>
 						<Stack
 							spacing={5}
@@ -170,11 +179,7 @@ const AddStudent = () => {
 						</Stack>
 					</RadioGroup>
 					<div display="flex">
-						<Button
-							mt={"25"}
-							onClick={handleSubmit}
-							isDisabled={loading || disabled}
-						>
+						<Button mt={"25"} onClick={handleSubmit} isDisabled={disabled()}>
 							{loading ? "Loading" : "Submit"}
 						</Button>
 						<Button
@@ -202,8 +207,9 @@ const AddStudent = () => {
 						<div key={index}>
 							<SubjectMarkingWidget
 								subjectName={subject}
+								results={results?.[subject] || []}
 								setResults={setResults}
-								auth={auth}
+								disabled={disabled()}
 							/>
 						</div>
 					))}
@@ -221,13 +227,13 @@ const AddStudent = () => {
 					}}
 				>
 					<label htmlFor="">Remarks: </label>
+
 					<RemarkPicker
-						remarks={remark}
-						setRemark={setRemark}
-						fruits={fruits}
-						setFruits={setFruits}
-						auth={auth}
-						disabled={disabled}
+						allRemarks={allRemarks}
+						setAllRemarks={setAllRemarks}
+						selectedRemarks={selectedRemarks}
+						setSelectedRemarks={setSelectedRemarks}
+						disabled={disabled()}
 					/>
 				</div>
 			</div>

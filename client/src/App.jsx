@@ -1,7 +1,6 @@
 // App.js
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./dashboard/Dashboard";
-import ExistingStudent from "./pages/ExistingStudent";
 import AddStudent from "./pages/AddStudent";
 import { useEffect, useState, useContext } from "react";
 import { fetchStudents } from "../api/students";
@@ -31,12 +30,9 @@ function App() {
 						<Dashboard students={students} auth={auth} setAuth={setAuth} />
 					}
 				/>
-				<Route path="/student/new" element={<AddStudent auth={auth} />} />
-				<Route path="/student/view/:id" element={<ExistingStudent />} />
-				<Route
-					path="/student/edit/:id"
-					element={<ExistingStudent auth={auth} students={students} />}
-				/>
+				<Route path="/student/new" element={<AddStudent type="new" />} />
+				<Route path="/student/view/:id" element={<AddStudent type="view" />} />
+				<Route path="/student/edit/:id" element={<AddStudent type="edit" />} />
 			</Routes>
 		</BrowserRouter>
 	);

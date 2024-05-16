@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 
-const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
+const SubjectMarkingWidget = ({
+	subjectName,
+	results,
+	setResults,
+	disabled,
+}) => {
 	const totalQuestions = 5;
 	const [questionStates, setQuestionStates] = useState(
 		new Array(totalQuestions).fill(0)
 	);
-
 	useEffect(() => {
-		if (results) {
+		if (results && results.length > 0) {
 			setQuestionStates(results);
 		}
 	}, [results]);
 
 	const toggleMark = (index) => {
-		if (!auth) return;
+		if (disabled) return;
 		const newQuestionStates = [...questionStates];
 		newQuestionStates[index] = (newQuestionStates[index] + 1) % 4; // Cycle through 0, 1, 2, 3
 		setQuestionStates(newQuestionStates);
@@ -25,10 +29,10 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 	};
 
 	const addQuestion = () => {
-		if (auth) setQuestionStates([...questionStates, 0]);
+		if (!disabled) setQuestionStates([...questionStates, 0]);
 	};
 	const removeQuestion = () => {
-		if (auth) setQuestionStates(questionStates.slice(0, -1));
+		if (!disabled) setQuestionStates(questionStates.slice(0, -1));
 	};
 
 	const getColor = (state) => {
@@ -64,7 +68,7 @@ const SubjectMarkingWidget = ({ subjectName, results, setResults, auth }) => {
 							border: "1px solid #000",
 							margin: "5px",
 							backgroundColor: getColor(state),
-							cursor: auth ? "pointer" : "default",
+							cursor: disabled ? "no-drop" : "pointer",
 						}}
 						onClick={() => toggleMark(index)}
 					>

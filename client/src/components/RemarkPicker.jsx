@@ -1,26 +1,25 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
 	Tag,
 	TagLabel,
 	TagLeftIcon,
-	TagCloseButton,
 	Flex,
 	Tooltip,
-	Select,
 	Input,
 } from "@chakra-ui/react";
 import { AiFillCheckCircle, AiFillCloseCircle } from "react-icons/ai";
 
-const FruitsSelector = ({
-	fruits,
-	setFruits,
-	remarks: selectedRemarks,
-	setRemark: setSelectedRemarks,
-	auth,
+const RemarkPicker = ({
+	allRemarks,
+	setAllRemarks,
+	selectedRemarks,
+	setSelectedRemarks,
+	disabled,
 }) => {
-	const [customFruit, setCustomFruit] = useState();
+	const [customRemark, setCustomRemark] = useState();
+
 	const toggleRemarkSelection = (remark) => {
-		if (!auth) return;
+		if (disabled) return;
 		if (selectedRemarks.includes(remark)) {
 			setSelectedRemarks(
 				selectedRemarks.filter((selectedRemark) => selectedRemark !== remark)
@@ -30,45 +29,46 @@ const FruitsSelector = ({
 		}
 	};
 
-	const addFruit = (fruit) => {
-		if (!auth) return;
-		setFruits([...fruits, fruit]);
-		setSelectedRemarks([...selectedRemarks, fruit]);
+	const addCustomRemark = () => {
+		if (disabled) return;
+		setCustomRemark("");
+		setAllRemarks([...allRemarks, customRemark]);
+		setSelectedRemarks([...selectedRemarks, customRemark]);
 	};
 
 	return (
 		<Flex flexWrap="wrap">
-			{fruits.map((fruit, index) => (
-				<Tooltip label={fruit} key={index}>
+			{allRemarks.map((rmk, index) => (
+				<Tooltip label={rmk} key={index}>
 					<Tag
-						variant={selectedRemarks.includes(fruit) ? "solid" : "outline"}
-						colorScheme={selectedRemarks.includes(fruit) ? "red" : "gray"}
-						cursor="pointer"
-						onClick={() => toggleRemarkSelection(fruit)}
+						variant={selectedRemarks.includes(rmk) ? "solid" : "outline"}
+						colorScheme={selectedRemarks.includes(rmk) ? "red" : "gray"}
+						cursor={disabled ? "no-drop" : "pointer"}
+						onClick={() => !disabled && toggleRemarkSelection(rmk)}
 						mb={2}
 						mr={2}
 					>
 						<TagLeftIcon
 							as={
-								selectedRemarks.includes(fruit)
+								selectedRemarks.includes(rmk)
 									? AiFillCloseCircle
 									: AiFillCheckCircle
 							}
 							boxSize={4}
 						/>
-						<TagLabel>{fruit}</TagLabel>
+						<TagLabel>{rmk}</TagLabel>
 					</Tag>
 				</Tooltip>
 			))}
 			<Input
 				placeholder="Add custom remark"
-				value={customFruit}
-				onChange={(e) => setCustomFruit(e.target.value)}
-				disabled={!auth}
+				value={customRemark}
+				onChange={(e) => setCustomRemark(e.target.value)}
+				disabled={disabled}
 				onKeyPress={(e) => {
 					if (e.key === "Enter") {
-						addFruit(customFruit);
-						setCustomFruit("");
+						addCustomRemark(customRemark);
+						setCustomRemark("");
 					}
 				}}
 			/>
@@ -76,4 +76,4 @@ const FruitsSelector = ({
 	);
 };
 
-export default FruitsSelector;
+export default RemarkPicker;

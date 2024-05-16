@@ -21,11 +21,13 @@ export const UserProvider = ({ children }) => {
 	}, [auth]);
 
 	const getAuth = () => {
+		if (auth) return auth;
 		const storedAuth = localStorage.getItem("auth");
 		if (storedAuth) {
 			setAuth(JSON.parse(storedAuth));
 			return JSON.parse(storedAuth);
 		}
+		return null;
 	};
 
 	// Value object to be provided by the context
