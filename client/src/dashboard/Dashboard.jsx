@@ -79,7 +79,7 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td>{reduceScore(student.results?.NodeExpress)}</td>
 								<td>{reduceScore(student.results?.Database)}</td>
 								<td>{totalScore(student?.results)}</td> */}
-								<td>{student.remark}</td>
+								<td>{student.remark.join(", ")}</td>
 								<td>
 									<Button
 										onClick={() => navigate(`/student/view/${student._id}`)}
