@@ -45,6 +45,11 @@ const Dashboard = ({ students, auth, setAuth }) => {
 		return topic?.reduce((acc, curr) => acc + curr, 0) + "/" + topic?.length;
 	};
 
+	const processRemarks = (remarks) => {
+		if (remarks.join(", ").length < 100) return remarks.join(", ");
+		return remarks.join(", ").slice(0, 100).concat("...");
+	};
+
 	return (
 		<div className={styles.page}>
 			<NavBar auth={auth} setAuth={setAuth} />
@@ -79,7 +84,7 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td>{reduceScore(student.results?.NodeExpress)}</td>
 								<td>{reduceScore(student.results?.Database)}</td>
 								<td>{totalScore(student?.results)}</td> */}
-								<td>{student.remark.join(", ")}</td>
+								<td>{processRemarks(student?.remark)}</td>
 								<td>
 									<Button
 										onClick={() => navigate(`/student/view/${student._id}`)}
