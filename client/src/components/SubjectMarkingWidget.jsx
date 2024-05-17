@@ -1,4 +1,11 @@
 import { useEffect, useState } from "react";
+import {
+	NumberInput,
+	NumberInputField,
+	NumberInputStepper,
+	NumberIncrementStepper,
+	NumberDecrementStepper,
+} from "@chakra-ui/react";
 
 const SubjectMarkingWidget = ({
 	subjectName,
@@ -10,11 +17,20 @@ const SubjectMarkingWidget = ({
 	const [questionStates, setQuestionStates] = useState(
 		new Array(totalQuestions).fill(0)
 	);
+	const [score, setScore] = useState(0);
 	useEffect(() => {
 		if (results && results.length > 0) {
 			setQuestionStates(results);
 		}
 	}, [results]);
+
+	useEffect(() => {
+		const scoreOutOf10 = Math.ceil(
+			((correctCount + partiallyCorrectCount * 0.5) / questionStates.length) *
+				10
+		);
+		setScore(scoreOutOf10);
+	}, [questionStates]);
 
 	const toggleMark = (index) => {
 		if (disabled) return;
@@ -46,9 +62,6 @@ const SubjectMarkingWidget = ({
 	const partiallyCorrectCount = questionStates.filter(
 		(state) => state === 2
 	).length;
-
-	const scoreInPercentage =
-		(correctCount + partiallyCorrectCount * 0.5) / totalQuestions;
 
 	return (
 		<div>
@@ -113,20 +126,30 @@ const SubjectMarkingWidget = ({
 			</div>
 			<div
 				style={{
-					width: "60px",
-					fontWeight: "bold",
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-					backgroundColor: "lightgray",
-					borderRadius: "5px",
-					outline: "2px solid #000",
-					padding: "3px",
-					marginTop: "5px",
-					marginBottom: "15px",
+					width: "70px",
+					// fontWeight: "bold",
+					// display: "flex",
+					// justifyContent: "center",
+					// alignItems: "center",
+					// backgroundColor: "lightgray",
+					// borderRadius: "5px",
+					// outline: "2px solid #000",
+					// padding: "3px",
+					// marginTop: "5px",
+					// marginBottom: "15px",
 				}}
 			>
-				{Math.round(scoreInPercentage * 10000) / 100}%
+				<NumberInput value={score} min={0} max={10}>
+					<NumberInputField />
+					<NumberInputStepper>
+						<NumberIncrementStepper
+							onClick={() => (score < 10 ? setScore(score + 1) : null)}
+						/>
+						<NumberDecrementStepper
+							onClick={() => (score > 0 ? setScore(score - 1) : null)}
+						/>
+					</NumberInputStepper>
+				</NumberInput>
 			</div>
 		</div>
 	);
