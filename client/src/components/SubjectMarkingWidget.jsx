@@ -135,14 +135,18 @@ const SubjectMarkingWidget = ({
 					gap: "10px",
 				}}
 			>
-				<NumberInput value={score} min={0} max={10}>
+				<NumberInput disabled={disabled} value={score} min={0} max={10}>
 					<NumberInputField />
 					<NumberInputStepper>
 						<NumberIncrementStepper
-							onClick={() => (score < 10 ? setScore(score + 1) : null)}
+							onClick={() =>
+								!disabled && score < 10 ? setScore(score + 1) : null
+							}
 						/>
 						<NumberDecrementStepper
-							onClick={() => (score > 0 ? setScore(score - 1) : null)}
+							onClick={() =>
+								!disabled && score > 0 ? setScore(score - 1) : null
+							}
 						/>
 					</NumberInputStepper>
 				</NumberInput>
