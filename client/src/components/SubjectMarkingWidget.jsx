@@ -113,7 +113,7 @@ const SubjectMarkingWidget = ({
 			</div>
 			<div
 				style={{
-					width: "50px",
+					width: "60px",
 					fontWeight: "bold",
 					display: "flex",
 					justifyContent: "center",
