@@ -30,12 +30,6 @@ MongoClient.connect(mongoURI)
             res.status(200).json({ message: 'Hello, world!' });
         });
 
-        app.get('/testbench', (req, res) => {
-            res.status(200).json({ message: 'Hi Sushma, kaisi ho ?' });
-        });
-
-
-
         // Authentication route
         app.post('/user/login', (req, res) => {
             const { pin } = req.body;
