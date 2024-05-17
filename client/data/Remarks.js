@@ -17,7 +17,6 @@ export const remarks = [
     "Not able to answer basic questions in React",
     "Not able to solve database queries questions",
     "Not able to answer questions on database concepts",
-    "Weak in communication part",
     "Lacks in confidence while expressing answers",
     "Lacks logical thinking while solving any problem"
     // Add more questions as needed
