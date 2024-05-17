@@ -47,6 +47,9 @@ const SubjectMarkingWidget = ({
 		(state) => state === 2
 	).length;
 
+	const scoreInPercentage =
+		(correctCount + partiallyCorrectCount * 0.5) / totalQuestions;
+
 	return (
 		<div>
 			<h2>{subjectName}</h2>
@@ -107,6 +110,23 @@ const SubjectMarkingWidget = ({
 				>
 					-
 				</div>
+			</div>
+			<div
+				style={{
+					width: "50px",
+					fontWeight: "bold",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					backgroundColor: "lightgray",
+					borderRadius: "5px",
+					outline: "2px solid #000",
+					padding: "3px",
+					marginTop: "5px",
+					marginBottom: "15px",
+				}}
+			>
+				{Math.round(scoreInPercentage * 10000) / 100}%
 			</div>
 		</div>
 	);
