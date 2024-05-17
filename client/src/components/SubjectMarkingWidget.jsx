@@ -18,6 +18,7 @@ const SubjectMarkingWidget = ({
 		new Array(totalQuestions).fill(0)
 	);
 	const [score, setScore] = useState(0);
+	const [copyScore, setCopyScore] = useState(0);
 	useEffect(() => {
 		if (results && results.length > 0) {
 			setQuestionStates(results);
@@ -30,6 +31,7 @@ const SubjectMarkingWidget = ({
 				10
 		);
 		setScore(scoreOutOf10);
+		setCopyScore(scoreOutOf10);
 	}, [questionStates]);
 
 	const toggleMark = (index) => {
@@ -126,17 +128,11 @@ const SubjectMarkingWidget = ({
 			</div>
 			<div
 				style={{
-					width: "70px",
-					// fontWeight: "bold",
-					// display: "flex",
-					// justifyContent: "center",
-					// alignItems: "center",
-					// backgroundColor: "lightgray",
-					// borderRadius: "5px",
-					// outline: "2px solid #000",
-					// padding: "3px",
-					// marginTop: "5px",
-					// marginBottom: "15px",
+					width: "120px",
+					display: "flex",
+					justifyContent: "space-between",
+					alignItems: "center",
+					gap: "10px",
 				}}
 			>
 				<NumberInput value={score} min={0} max={10}>
@@ -150,6 +146,20 @@ const SubjectMarkingWidget = ({
 						/>
 					</NumberInputStepper>
 				</NumberInput>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						fontWeight: "bold",
+						padding: "5px 10px",
+						borderRadius: "2px",
+						outline: "1px solid #000",
+						backgroundColor: "lightgray",
+					}}
+				>
+					{copyScore}
+				</div>
 			</div>
 		</div>
 	);
