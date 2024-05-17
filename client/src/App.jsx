@@ -11,16 +11,19 @@ function App() {
 	// const [auth, setAuth] = useState();
 	const { auth, getAuth, setAuth } = useContext(UserContext);
 	useEffect(() => {
-		fetchStudents().then((data) => {
-			console.log(data);
-			setStudents(data);
-		});
-		console.log(getAuth());
+		refreshStudentsOnLanding();
 		const token = localStorage.getItem("token");
 		if (token) {
 			setAuth(token);
 		}
 	}, []);
+
+	function refreshStudentsOnLanding() {
+		fetchStudents().then((data) => {
+			setStudents(data);
+		});
+	}
+
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -30,9 +33,33 @@ function App() {
 						<Dashboard students={students} auth={auth} setAuth={setAuth} />
 					}
 				/>
-				<Route path="/student/new" element={<AddStudent type="new" />} />
-				<Route path="/student/view/:id" element={<AddStudent type="view" />} />
-				<Route path="/student/edit/:id" element={<AddStudent type="edit" />} />
+				<Route
+					path="/student/new"
+					element={
+						<AddStudent
+							type="new"
+							refreshStudentsOnLanding={refreshStudentsOnLanding}
+						/>
+					}
+				/>
+				<Route
+					path="/student/view/:id"
+					element={
+						<AddStudent
+							type="view"
+							refreshStudentsOnLanding={refreshStudentsOnLanding}
+						/>
+					}
+				/>
+				<Route
+					path="/student/edit/:id"
+					element={
+						<AddStudent
+							type="edit"
+							refreshStudentsOnLanding={refreshStudentsOnLanding}
+						/>
+					}
+				/>
 			</Routes>
 		</BrowserRouter>
 	);

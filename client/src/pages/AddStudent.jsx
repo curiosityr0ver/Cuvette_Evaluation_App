@@ -19,7 +19,7 @@ import { fetchStudent } from "../../api/students";
 import { useNavigate } from "react-router-dom";
 import { remarks } from "../../data/Remarks";
 
-const AddStudent = ({ type }) => {
+const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [name, setName] = useState();
 	const [interview, setInterview] = useState("Evaluation");
 	const [results, setResults] = useState();
@@ -184,7 +184,10 @@ const AddStudent = ({ type }) => {
 						</Button>
 						<Button
 							mt={"25"}
-							onClick={() => navigate("/")}
+							onClick={() => {
+								refreshStudentsOnLanding();
+								navigate("/");
+							}}
 							isDisabled={loading}
 						>
 							Home

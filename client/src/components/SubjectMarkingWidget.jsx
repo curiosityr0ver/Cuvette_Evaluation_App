@@ -6,7 +6,7 @@ const SubjectMarkingWidget = ({
 	setResults,
 	disabled,
 }) => {
-	const totalQuestions = 5;
+	const totalQuestions = 7;
 	const [questionStates, setQuestionStates] = useState(
 		new Array(totalQuestions).fill(0)
 	);
