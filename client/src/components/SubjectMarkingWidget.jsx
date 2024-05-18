@@ -36,22 +36,24 @@ const SubjectMarkingWidget = ({
 
 	const toggleMark = (index) => {
 		if (disabled) return;
-		const newQuestionStates = [...questionStates];
-		newQuestionStates[index] = (newQuestionStates[index] + 1) % 4; // Cycle through 0, 1, 2, 3
-		setQuestionStates(newQuestionStates);
-		setResults((results) => {
-			const newResults = { ...results };
-			newResults[subjectName] = newQuestionStates;
-			return newResults;
-		});
+		questionStates[index] = (questionStates[index] + 1) % 4; // Cycle through 0, 1, 2, 3
+		setQuestionStates([...questionStates]);
 	};
 
 	const addQuestion = () => {
 		if (!disabled) setQuestionStates([...questionStates, 0]);
 	};
 	const removeQuestion = () => {
-		if (!disabled) setQuestionStates(questionStates.slice(0, -1));
+		if (!disabled) setQuestionStates([...questionStates.slice(0, -1)]);
 	};
+
+	useEffect(() => {
+		setResults((results) => {
+			const newResults = { ...results };
+			newResults[subjectName] = questionStates;
+			return newResults;
+		});
+	}, [questionStates]);
 
 	const getColor = (state) => {
 		if (state === 1) return "green";
