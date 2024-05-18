@@ -11,13 +11,15 @@ const SubjectMarkingWidget = ({
 	subjectName,
 	results,
 	setResults,
+	finalScore,
+	setFinalScore,
 	disabled,
 }) => {
 	const totalQuestions = 7;
 	const [questionStates, setQuestionStates] = useState(
 		new Array(totalQuestions).fill(0)
 	);
-	const [score, setScore] = useState(0);
+	const [score, setScore] = useState(finalScore || 0);
 	const [copyScore, setCopyScore] = useState(0);
 	useEffect(() => {
 		if (results && results.length > 0) {
@@ -33,6 +35,15 @@ const SubjectMarkingWidget = ({
 		setScore(scoreOutOf10);
 		setCopyScore(scoreOutOf10);
 	}, [questionStates]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			console.log("finalScore", subjectName, finalScore);
+			if (finalScore) {
+				setScore(finalScore);
+			}
+		}, 500);
+	}, [finalScore]);
 
 	const toggleMark = (index) => {
 		if (disabled) return;
@@ -54,6 +65,14 @@ const SubjectMarkingWidget = ({
 			return newResults;
 		});
 	}, [questionStates]);
+
+	useEffect(() => {
+		setFinalScore((scores) => {
+			const newScores = { ...scores };
+			newScores[subjectName] = score;
+			return newScores;
+		});
+	}, [score]);
 
 	const getColor = (state) => {
 		if (state === 1) return "green";

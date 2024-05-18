@@ -26,24 +26,24 @@ const Dashboard = ({ students, auth, setAuth }) => {
 		});
 	};
 
-	const totalScore = (topics) => {
-		let total = 0;
-		total += topics?.JavaScript?.reduce((acc, curr) => acc + curr, 0) || 0;
-		total += topics?.React?.reduce((acc, curr) => acc + curr, 0) || 0;
-		total += topics?.NodeExpress?.reduce((acc, curr) => acc + curr, 0) || 0;
-		total += topics?.Database?.reduce((acc, curr) => acc + curr, 0) || 0;
-		let max = 0;
-		max += topics?.JavaScript?.length || 0;
-		max += topics?.React?.length || 0;
-		max += topics?.NodeExpress?.length || 0;
-		max += topics?.Database?.length || 0;
-		return total + "/" + max;
-	};
+	// const totalScore = (topics) => {
+	// 	let total = 0;
+	// 	total += topics?.JavaScript?.reduce((acc, curr) => acc + curr, 0) || 0;
+	// 	total += topics?.React?.reduce((acc, curr) => acc + curr, 0) || 0;
+	// 	total += topics?.NodeExpress?.reduce((acc, curr) => acc + curr, 0) || 0;
+	// 	total += topics?.Database?.reduce((acc, curr) => acc + curr, 0) || 0;
+	// 	let max = 0;
+	// 	max += topics?.JavaScript?.length || 0;
+	// 	max += topics?.React?.length || 0;
+	// 	max += topics?.NodeExpress?.length || 0;
+	// 	max += topics?.Database?.length || 0;
+	// 	return total + "/" + max;
+	// };
 
-	const reduceScore = (topic) => {
-		if (topic === undefined) return "0/0";
-		return topic?.reduce((acc, curr) => acc + curr, 0) + "/" + topic?.length;
-	};
+	// const reduceScore = (topic) => {
+	// 	if (topic === undefined) return "0/0";
+	// 	return topic?.reduce((acc, curr) => acc + curr, 0) + "/" + topic?.length;
+	// };
 
 	const processRemarks = (remarks) => {
 		if (remarks.join(", ").length < 100) return remarks.join(", ");

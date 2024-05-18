@@ -10,7 +10,7 @@ import {
 	Text,
 } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
-import { addStudent } from "../../api/students";
+import { addStudent, updateStudent } from "../../api/students";
 import { UserContext } from "../context/UserContext";
 import { interviewOptions } from "../../data/options";
 import { communicationOptions } from "../../data/options";
@@ -24,6 +24,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [interview, setInterview] = useState("Evaluation");
 	const [results, setResults] = useState();
 	const [allRemarks, setAllRemarks] = useState(remarks);
+	const [finalScore, setFinalScore] = useState();
 	const [selectedRemarks, setSelectedRemarks] = useState([]);
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
@@ -39,17 +40,27 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 			name,
 			interview,
 			results,
+			finalScore,
 			remark: selectedRemarks,
 			communication,
 			explaination,
 			timestamp: date,
 		};
 		setLoading(true);
-		addStudent(student, auth).then((data) => {
-			console.log(data);
-			setLoading(false);
-			alert("Student Added Successfully");
-		});
+		if (type === "edit") {
+			const studentID = window.location.href.split("/")[5];
+			updateStudent(studentID, student, auth).then((data) => {
+				console.log(data);
+				setLoading(false);
+				alert("Student Updated Successfully");
+			});
+		} else if (type === "new") {
+			addStudent(student, auth).then((data) => {
+				console.log(data);
+				setLoading(false);
+				alert("Student Added Successfully");
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -66,6 +77,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 				setName(data.name);
 				setInterview(data.interview);
 				setResults(data.results);
+				setFinalScore(data.finalScore);
 				setCommunication(data.communication);
 				setExplaination(data.explaination);
 				setSelectedRemarks(data.remark);
@@ -212,6 +224,8 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 								subjectName={subject}
 								results={results?.[subject] || []}
 								setResults={setResults}
+								finalScore={finalScore?.[subject] || 0}
+								setFinalScore={setFinalScore}
 								disabled={disabled()}
 							/>
 						</div>

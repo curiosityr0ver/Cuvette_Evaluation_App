@@ -9,7 +9,7 @@ import { UserContext } from "./context/UserContext";
 function App() {
 	const [students, setStudents] = useState();
 	// const [auth, setAuth] = useState();
-	const { auth, getAuth, setAuth } = useContext(UserContext);
+	const { auth, setAuth } = useContext(UserContext);
 	useEffect(() => {
 		refreshStudentsOnLanding();
 		const token = localStorage.getItem("token");
