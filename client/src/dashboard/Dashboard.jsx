@@ -50,6 +50,14 @@ const Dashboard = ({ students, auth, setAuth }) => {
 		return remarks.join(", ").slice(0, 100).concat("...");
 	};
 
+	const copyRemarks = (remarks) => {
+		const textToCopy = remarks.join(", ");
+		navigator.clipboard
+			.writeText(textToCopy)
+			.then(() => alert("Remarks copied to clipboard!"))
+			.catch((err) => alert("Failed to copy remarks: ", err));
+	};
+
 	return (
 		<div className={styles.page}>
 			<NavBar auth={auth} setAuth={setAuth} />
@@ -84,7 +92,13 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td>{reduceScore(student.results?.NodeExpress)}</td>
 								<td>{reduceScore(student.results?.Database)}</td>
 								<td>{totalScore(student?.results)}</td> */}
-								<td>{processRemarks(student?.remark)}</td>
+								<td
+									onClick={() => copyRemarks(student?.remark)}
+									style={{ cursor: "pointer" }}
+									title="Click to copy remarks"
+								>
+									{processRemarks(student?.remark)}
+								</td>
 								<td>
 									<Button
 										onClick={() => navigate(`/student/view/${student._id}`)}
