@@ -11,16 +11,17 @@ const SubjectMarkingWidget = ({
 	subjectName,
 	results,
 	setResults,
-	finalScore,
-	setFinalScore,
+	score,
+	setScore,
 	disabled,
 }) => {
 	const totalQuestions = 7;
 	const [questionStates, setQuestionStates] = useState(
 		new Array(totalQuestions).fill(0)
 	);
-	const [score, setScore] = useState(finalScore || 0);
+	const [clicked, setClicked] = useState(false);
 	const [copyScore, setCopyScore] = useState(0);
+
 	useEffect(() => {
 		if (results && results.length > 0) {
 			setQuestionStates(results);
@@ -32,21 +33,18 @@ const SubjectMarkingWidget = ({
 			((correctCount + partiallyCorrectCount * 0.5) / questionStates.length) *
 				10
 		);
-		setScore(scoreOutOf10);
 		setCopyScore(scoreOutOf10);
+		if (!clicked) return;
+		setScore((_score) => {
+			const newScore = { ..._score };
+			newScore[subjectName] = scoreOutOf10;
+			return newScore;
+		});
 	}, [questionStates]);
-
-	useEffect(() => {
-		setTimeout(() => {
-			console.log("finalScore", subjectName, finalScore);
-			if (finalScore) {
-				setScore(finalScore);
-			}
-		}, 500);
-	}, [finalScore]);
 
 	const toggleMark = (index) => {
 		if (disabled) return;
+		setClicked(true);
 		questionStates[index] = (questionStates[index] + 1) % 4; // Cycle through 0, 1, 2, 3
 		setQuestionStates([...questionStates]);
 	};
@@ -66,13 +64,22 @@ const SubjectMarkingWidget = ({
 		});
 	}, [questionStates]);
 
-	useEffect(() => {
-		setFinalScore((scores) => {
-			const newScores = { ...scores };
-			newScores[subjectName] = score;
-			return newScores;
+	const incrementScore = () => {
+		if (disabled || score == 10) return;
+		setScore((_score) => {
+			const newScore = { ..._score };
+			newScore[subjectName] = score > 0 ? score + 1 : 1;
+			return newScore;
 		});
-	}, [score]);
+	};
+	const decrementScore = () => {
+		if (disabled || score == 0) return;
+		setScore((_score) => {
+			const newScore = { ..._score };
+			newScore[subjectName] = score > 0 ? score - 1 : 1;
+			return newScore;
+		});
+	};
 
 	const getColor = (state) => {
 		if (state === 1) return "green";
@@ -156,19 +163,11 @@ const SubjectMarkingWidget = ({
 					gap: "10px",
 				}}
 			>
-				<NumberInput disabled={disabled} value={score} min={0} max={10}>
+				<NumberInput disabled={disabled} value={score || 0} min={0} max={10}>
 					<NumberInputField />
 					<NumberInputStepper>
-						<NumberIncrementStepper
-							onClick={() =>
-								!disabled && score < 10 ? setScore(score + 1) : null
-							}
-						/>
-						<NumberDecrementStepper
-							onClick={() =>
-								!disabled && score > 0 ? setScore(score - 1) : null
-							}
-						/>
+						<NumberIncrementStepper onClick={() => incrementScore()} />
+						<NumberDecrementStepper onClick={() => decrementScore()} />
 					</NumberInputStepper>
 				</NumberInput>
 				<div

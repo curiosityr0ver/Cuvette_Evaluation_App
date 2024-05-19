@@ -24,7 +24,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [interview, setInterview] = useState("Evaluation");
 	const [results, setResults] = useState();
 	const [allRemarks, setAllRemarks] = useState(remarks);
-	const [finalScore, setFinalScore] = useState();
+	const [score, setScore] = useState();
 	const [selectedRemarks, setSelectedRemarks] = useState([]);
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
@@ -40,7 +40,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 			name,
 			interview,
 			results,
-			finalScore,
+			finalScore: score,
 			remark: selectedRemarks,
 			communication,
 			explaination,
@@ -73,11 +73,10 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 		if (type === "view" || type === "edit") {
 			const studentID = window.location.href.split("/")[5];
 			fetchStudent(studentID, auth).then((data) => {
-				console.log(data);
 				setName(data.name);
 				setInterview(data.interview);
 				setResults(data.results);
-				setFinalScore(data.finalScore);
+				setScore(data.finalScore);
 				setCommunication(data.communication);
 				setExplaination(data.explaination);
 				setSelectedRemarks(data.remark);
@@ -96,6 +95,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 		}
 		return false;
 	};
+
 	return (
 		<div>
 			<div
@@ -224,8 +224,8 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 								subjectName={subject}
 								results={results?.[subject] || []}
 								setResults={setResults}
-								finalScore={finalScore?.[subject] || 0}
-								setFinalScore={setFinalScore}
+								score={score?.[subject] || 0}
+								setScore={setScore}
 								disabled={disabled()}
 							/>
 						</div>
