@@ -12,7 +12,11 @@ import {
 import RemarkPicker from "../components/RemarkPicker";
 import { addStudent, updateStudent } from "../../api/students";
 import { UserContext } from "../context/UserContext";
-import { interviewOptions, statusOptions } from "../../data/options";
+import {
+	crossQuestioningOptions,
+	interviewOptions,
+	statusOptions,
+} from "../../data/options";
 import { communicationOptions } from "../../data/options";
 import { explainationOptions } from "../../data/options";
 import { fetchStudent } from "../../api/students";
@@ -21,13 +25,14 @@ import { remarks } from "../../data/Remarks";
 
 const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [name, setName] = useState();
-	const [interview, setInterview] = useState("Evaluation");
+	const [interview, setInterview] = useState();
 	const [results, setResults] = useState();
 	const [allRemarks, setAllRemarks] = useState(remarks);
 	const [score, setScore] = useState();
 	const [selectedRemarks, setSelectedRemarks] = useState([]);
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
+	const [crossQuestioning, setCrossQuestioning] = useState();
 	const [status, setStatus] = useState();
 	const [loading, setLoading] = useState(false);
 	const { auth, getAuth } = useContext(UserContext);
@@ -46,6 +51,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 			status,
 			communication,
 			explaination,
+			crossQuestioning,
 			timestamp: date,
 		};
 		setLoading(true);
@@ -81,6 +87,9 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 				setScore(data.finalScore);
 				setStatus(data.status || statusOptions[1]);
 				setCommunication(data.communication);
+				setCrossQuestioning(
+					data.crossQuestioning || crossQuestioningOptions[0]
+				);
 				setExplaination(data.explaination);
 				setSelectedRemarks(data.remark);
 				data.remark.forEach((remark) => {
@@ -129,7 +138,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						placeholder="Student Name"
 					/>
 					<RadioGroup
-						defaultValue="Evaluation"
+						defaultValue={interviewOptions[0]}
 						value={interview}
 						onChange={(val) => setInterview(val)}
 						isDisabled={disabled()}
@@ -144,6 +153,28 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						>
 							<Text fontWeight={600}>Interview: </Text>
 							{interviewOptions.map((option, index) => (
+								<Radio key={index} colorScheme="green" value={option}>
+									{option}
+								</Radio>
+							))}
+						</Stack>
+					</RadioGroup>
+					<RadioGroup
+						defaultValue={crossQuestioningOptions[0]}
+						value={crossQuestioning}
+						onChange={(val) => setCrossQuestioning(val)}
+						isDisabled={disabled()}
+					>
+						<Stack
+							spacing={5}
+							direction="row"
+							bg="gray.50"
+							p={4}
+							borderRadius="lg"
+							m={4}
+						>
+							<Text fontWeight={600}>Cross-Qtn: </Text>
+							{crossQuestioningOptions.map((option, index) => (
 								<Radio key={index} colorScheme="green" value={option}>
 									{option}
 								</Radio>
