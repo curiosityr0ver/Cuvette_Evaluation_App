@@ -8,7 +8,6 @@ import { UserContext } from "./context/UserContext";
 
 function App() {
 	const [students, setStudents] = useState();
-	// const [auth, setAuth] = useState();
 	const { auth, setAuth } = useContext(UserContext);
 	useEffect(() => {
 		refreshStudentsOnLanding();

@@ -12,7 +12,7 @@ import {
 import RemarkPicker from "../components/RemarkPicker";
 import { addStudent, updateStudent } from "../../api/students";
 import { UserContext } from "../context/UserContext";
-import { interviewOptions } from "../../data/options";
+import { interviewOptions, statusOptions } from "../../data/options";
 import { communicationOptions } from "../../data/options";
 import { explainationOptions } from "../../data/options";
 import { fetchStudent } from "../../api/students";
@@ -28,6 +28,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [selectedRemarks, setSelectedRemarks] = useState([]);
 	const [communication, setCommunication] = useState();
 	const [explaination, setExplaination] = useState();
+	const [status, setStatus] = useState();
 	const [loading, setLoading] = useState(false);
 	const { auth, getAuth } = useContext(UserContext);
 	const navigate = useNavigate();
@@ -42,6 +43,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 			results,
 			finalScore: score,
 			remark: selectedRemarks,
+			status,
 			communication,
 			explaination,
 			timestamp: date,
@@ -77,6 +79,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 				setInterview(data.interview);
 				setResults(data.results);
 				setScore(data.finalScore);
+				setStatus(data.status || statusOptions[1]);
 				setCommunication(data.communication);
 				setExplaination(data.explaination);
 				setSelectedRemarks(data.remark);
@@ -170,7 +173,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						</Stack>
 					</RadioGroup>
 					<RadioGroup
-						defaultValue="Good"
+						defaultValue={explainationOptions[0]}
 						value={explaination}
 						onChange={(val) => setExplaination(val)}
 						isDisabled={disabled()}
@@ -184,6 +187,27 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						>
 							<Text fontWeight={600}>Explaination: </Text>
 							{explainationOptions.map((option, index) => (
+								<Radio key={index} colorScheme="green" value={option}>
+									{option}
+								</Radio>
+							))}
+						</Stack>
+					</RadioGroup>
+					<RadioGroup
+						defaultValue={statusOptions[1]}
+						value={status}
+						onChange={(val) => setStatus(val)}
+						isDisabled={disabled()}
+					>
+						<Stack
+							spacing={5}
+							direction="row"
+							bg="gray.50"
+							p={4}
+							borderRadius="lg"
+						>
+							<Text fontWeight={600}>Status: </Text>
+							{statusOptions.map((option, index) => (
 								<Radio key={index} colorScheme="green" value={option}>
 									{option}
 								</Radio>
