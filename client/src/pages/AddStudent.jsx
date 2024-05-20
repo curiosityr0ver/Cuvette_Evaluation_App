@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { remarks } from "../../data/Remarks";
 import { parseOldStudent } from "../../data/parseOldStudent";
 import CustomRadioInput from "../components/CustomRadioInput";
+import styles from "./AddStudent.module.css";
 
 const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [name, setName] = useState();
@@ -134,18 +135,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 					padding: "4px",
 				}}
 			>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						alignItems: "center",
-						justifyContent: "space-around",
-						padding: "12px",
-						backgroundColor: "lightgray",
-						width: "35%",
-						borderRadius: "10px",
-					}}
-				>
+				<div className={styles.sectionOne}>
 					<Input
 						type="text"
 						value={name}
@@ -232,18 +222,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						</Button>
 					</div>
 				</div>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						width: "35%",
-						marginLeft: "8px",
-						paddingLeft: "20px",
-						boxSizing: "border-box",
-						border: "3px dashed black",
-						borderRadius: "10px",
-					}}
-				>
+				<div className={styles.sectionTwo}>
 					{subjects.map((subject, index) => (
 						<div key={index}>
 							<SubjectMarkingWidget
@@ -257,18 +236,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						</div>
 					))}
 				</div>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "column",
-						width: "38%",
-						marginLeft: "8px",
-						padding: "0px 3%",
-						boxSizing: "border-box",
-						border: "3px dashed black",
-						borderRadius: "10px",
-					}}
-				>
+				<div className={styles.sectionThree}>
 					<label htmlFor="">Remarks: </label>
 
 					<RemarkPicker
