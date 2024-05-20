@@ -86,7 +86,7 @@ const Dashboard = ({ students, auth, setAuth }) => {
 								<td className={styles.inline}>
 									{formatDate(student.timestamp)}
 								</td>
-								<td>{student.interview}</td>
+								<td>{student.interview || "Evaluation"}</td>
 								{/* <td>{reduceScore(student.results?.JavaScript)}</td>
 								<td>{reduceScore(student.results?.React)}</td>
 								<td>{reduceScore(student.results?.NodeExpress)}</td>
