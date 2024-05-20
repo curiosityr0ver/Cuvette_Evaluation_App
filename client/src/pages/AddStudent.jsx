@@ -8,20 +8,21 @@ import {
 	Radio,
 	RadioGroup,
 	Text,
+	NumberInput,
+	NumberInputField,
+	NumberInputStepper,
+	NumberIncrementStepper,
+	NumberDecrementStepper,
 } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
 import { addStudent, updateStudent } from "../../api/students";
 import { UserContext } from "../context/UserContext";
-import {
-	crossQuestioningOptions,
-	interviewOptions,
-	statusOptions,
-} from "../../data/options";
+import { interviewOptions, statusOptions } from "../../data/options";
 import { communicationOptions } from "../../data/options";
-import { explainationOptions } from "../../data/options";
 import { fetchStudent } from "../../api/students";
 import { useNavigate } from "react-router-dom";
 import { remarks } from "../../data/Remarks";
+import { parseOldStudent } from "../../data/parseOldStudent";
 
 const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [name, setName] = useState();
@@ -31,10 +32,8 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [score, setScore] = useState();
 	const [selectedRemarks, setSelectedRemarks] = useState([]);
 	const [communication, setCommunication] = useState(communicationOptions[0]);
-	const [explaination, setExplaination] = useState(explainationOptions[0]);
-	const [crossQuestioning, setCrossQuestioning] = useState(
-		crossQuestioningOptions[0]
-	);
+	const [explaination, setExplaination] = useState(5);
+	const [crossQuestioning, setCrossQuestioning] = useState(5);
 	const [status, setStatus] = useState();
 	const [loading, setLoading] = useState(false);
 	const { auth, getAuth } = useContext(UserContext);
@@ -55,6 +54,7 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 			explaination,
 			crossQuestioning,
 			timestamp: date,
+			version: 2,
 		};
 		setLoading(true);
 		if (type === "edit") {
@@ -82,16 +82,15 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 		}
 		if (type === "view" || type === "edit") {
 			const studentID = window.location.href.split("/")[5];
-			fetchStudent(studentID, auth).then((data) => {
+			fetchStudent(studentID, auth).then((_data) => {
+				const data = parseOldStudent(_data);
 				setName(data.name);
 				setInterview(data.interview);
 				setResults(data.results);
 				setScore(data.finalScore);
 				setStatus(data.status || statusOptions[1]);
 				setCommunication(data.communication);
-				setCrossQuestioning(
-					data.crossQuestioning || crossQuestioningOptions[0]
-				);
+				setCrossQuestioning(data.crossQuestioning || 5);
 				setExplaination(data.explaination);
 				setSelectedRemarks(data.remark);
 				data.remark.forEach((remark) => {
@@ -108,6 +107,23 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 			return true;
 		}
 		return false;
+	};
+
+	const incrementCrossQtn = () => {
+		if (disabled() || crossQuestioning == 10) return;
+		setCrossQuestioning(crossQuestioning + 1);
+	};
+	const decrementCrossQtn = () => {
+		if (disabled() || crossQuestioning == 0) return;
+		setCrossQuestioning(crossQuestioning - 1);
+	};
+	const incrementExplaination = () => {
+		if (disabled() || explaination == 10) return;
+		setExplaination(explaination + 1);
+	};
+	const decrementExplaination = () => {
+		if (disabled() || explaination == 0) return;
+		setExplaination(explaination - 1);
 	};
 
 	return (
@@ -161,28 +177,46 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 							))}
 						</Stack>
 					</RadioGroup>
-					<RadioGroup
-						defaultValue={crossQuestioningOptions[0]}
-						value={crossQuestioning}
-						onChange={(val) => setCrossQuestioning(val)}
-						isDisabled={disabled()}
+					<Stack
+						spacing={5}
+						direction="row"
+						alignItems="center"
+						bg="gray.50"
+						p={3}
+						borderRadius="lg"
+						mb={4}
 					>
-						<Stack
-							spacing={5}
-							direction="row"
-							bg="gray.50"
-							p={4}
-							borderRadius="lg"
-							m={4}
+						<Text fontWeight={600}>Cross-Questioning: </Text>
+						<NumberInput
+							disabled={disabled()}
+							value={crossQuestioning}
+							min={0}
+							max={10}
 						>
-							<Text fontWeight={600}>Cross-Qtn: </Text>
-							{crossQuestioningOptions.map((option, index) => (
-								<Radio key={index} colorScheme="green" value={option}>
-									{option}
-								</Radio>
-							))}
-						</Stack>
-					</RadioGroup>
+							<NumberInputField />
+							<NumberInputStepper>
+								<NumberIncrementStepper onClick={() => incrementCrossQtn()} />
+								<NumberDecrementStepper onClick={() => decrementCrossQtn()} />
+							</NumberInputStepper>
+						</NumberInput>
+						<Text fontWeight={600}>Explaination </Text>
+						<NumberInput
+							disabled={disabled()}
+							value={explaination}
+							min={0}
+							max={10}
+						>
+							<NumberInputField />
+							<NumberInputStepper>
+								<NumberIncrementStepper
+									onClick={() => incrementExplaination()}
+								/>
+								<NumberDecrementStepper
+									onClick={() => decrementExplaination()}
+								/>
+							</NumberInputStepper>
+						</NumberInput>
+					</Stack>
 					<RadioGroup
 						defaultValue="Good"
 						value={communication}
@@ -199,27 +233,6 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						>
 							<Text fontWeight={600}>Communication: </Text>
 							{communicationOptions.map((option, index) => (
-								<Radio key={index} colorScheme="green" value={option}>
-									{option}
-								</Radio>
-							))}
-						</Stack>
-					</RadioGroup>
-					<RadioGroup
-						defaultValue={explainationOptions[0]}
-						value={explaination}
-						onChange={(val) => setExplaination(val)}
-						isDisabled={disabled()}
-					>
-						<Stack
-							spacing={5}
-							direction="row"
-							bg="gray.50"
-							p={4}
-							borderRadius="lg"
-						>
-							<Text fontWeight={600}>Explaination: </Text>
-							{explainationOptions.map((option, index) => (
 								<Radio key={index} colorScheme="green" value={option}>
 									{option}
 								</Radio>
