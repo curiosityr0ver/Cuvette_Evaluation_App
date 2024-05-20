@@ -5,8 +5,6 @@ import {
 	Input,
 	Button,
 	Stack,
-	Radio,
-	RadioGroup,
 	Text,
 	NumberInput,
 	NumberInputField,
@@ -23,6 +21,7 @@ import { fetchStudent } from "../../api/students";
 import { useNavigate } from "react-router-dom";
 import { remarks } from "../../data/Remarks";
 import { parseOldStudent } from "../../data/parseOldStudent";
+import CustomRadioInput from "../components/CustomRadioInput";
 
 const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [name, setName] = useState();
@@ -155,28 +154,13 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 						disabled={disabled()}
 						placeholder="Student Name"
 					/>
-					<RadioGroup
-						defaultValue={interviewOptions[0]}
+					<CustomRadioInput
+						label="Interview"
 						value={interview}
-						onChange={(val) => setInterview(val)}
-						isDisabled={disabled()}
-					>
-						<Stack
-							spacing={5}
-							direction="row"
-							bg="gray.50"
-							p={4}
-							borderRadius="lg"
-							m={4}
-						>
-							<Text fontWeight={600}>Interview: </Text>
-							{interviewOptions.map((option, index) => (
-								<Radio key={index} colorScheme="green" value={option}>
-									{option}
-								</Radio>
-							))}
-						</Stack>
-					</RadioGroup>
+						setValue={setInterview}
+						options={interviewOptions}
+						disabled={disabled()}
+					/>
 					<Stack
 						spacing={5}
 						direction="row"
@@ -217,49 +201,21 @@ const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 							</NumberInputStepper>
 						</NumberInput>
 					</Stack>
-					<RadioGroup
-						defaultValue="Good"
+					<CustomRadioInput
+						label="Communication"
 						value={communication}
-						onChange={(val) => setCommunication(val)}
-						isDisabled={disabled()}
-					>
-						<Stack
-							spacing={5}
-							direction="row"
-							bg="gray.50"
-							p={4}
-							borderRadius="lg"
-							mb={4}
-						>
-							<Text fontWeight={600}>Communication: </Text>
-							{communicationOptions.map((option, index) => (
-								<Radio key={index} colorScheme="green" value={option}>
-									{option}
-								</Radio>
-							))}
-						</Stack>
-					</RadioGroup>
-					<RadioGroup
-						defaultValue={statusOptions[1]}
+						setValue={setCommunication}
+						options={communicationOptions}
+						disabled={disabled()}
+					/>
+					<CustomRadioInput
+						label="Status"
 						value={status}
-						onChange={(val) => setStatus(val)}
-						isDisabled={disabled()}
-					>
-						<Stack
-							spacing={5}
-							direction="row"
-							bg="gray.50"
-							p={4}
-							borderRadius="lg"
-						>
-							<Text fontWeight={600}>Status: </Text>
-							{statusOptions.map((option, index) => (
-								<Radio key={index} colorScheme="green" value={option}>
-									{option}
-								</Radio>
-							))}
-						</Stack>
-					</RadioGroup>
+						setValue={setStatus}
+						options={statusOptions}
+						disabled={disabled()}
+					/>
+
 					<div display="flex">
 						<Button mt={"25"} onClick={handleSubmit} isDisabled={disabled()}>
 							{loading ? "Loading" : "Submit"}
