@@ -25,14 +25,16 @@ import { remarks } from "../../data/Remarks";
 
 const AddStudent = ({ type, refreshStudentsOnLanding }) => {
 	const [name, setName] = useState();
-	const [interview, setInterview] = useState();
+	const [interview, setInterview] = useState(interviewOptions[0]);
 	const [results, setResults] = useState();
 	const [allRemarks, setAllRemarks] = useState(remarks);
 	const [score, setScore] = useState();
 	const [selectedRemarks, setSelectedRemarks] = useState([]);
-	const [communication, setCommunication] = useState();
-	const [explaination, setExplaination] = useState();
-	const [crossQuestioning, setCrossQuestioning] = useState();
+	const [communication, setCommunication] = useState(communicationOptions[0]);
+	const [explaination, setExplaination] = useState(explainationOptions[0]);
+	const [crossQuestioning, setCrossQuestioning] = useState(
+		crossQuestioningOptions[0]
+	);
 	const [status, setStatus] = useState();
 	const [loading, setLoading] = useState(false);
 	const { auth, getAuth } = useContext(UserContext);
