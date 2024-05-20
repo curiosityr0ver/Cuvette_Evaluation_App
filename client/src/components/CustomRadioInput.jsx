@@ -1,4 +1,4 @@
-import { Radio, RadioGroup, Stack, Text } from "@chakra-ui/react";
+import { Radio, RadioGroup, Container, Text } from "@chakra-ui/react";
 
 function CustomRadioInput({ label, value, setValue, options, disabled }) {
 	return (
@@ -7,11 +7,13 @@ function CustomRadioInput({ label, value, setValue, options, disabled }) {
 			onChange={(val) => setValue(val)}
 			isDisabled={disabled}
 		>
-			<Stack
+			<Container
+				display="flex"
 				spacing={5}
 				direction="row"
+				justifyContent="space-between"
 				alignItems="center"
-				bg="gray.50"
+				bg="white"
 				p={4}
 				borderRadius="lg"
 				m={4}
@@ -22,7 +24,7 @@ function CustomRadioInput({ label, value, setValue, options, disabled }) {
 						{option}
 					</Radio>
 				))}
-			</Stack>
+			</Container>
 		</RadioGroup>
 	);
 }
