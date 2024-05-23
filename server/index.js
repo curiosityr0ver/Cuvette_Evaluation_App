@@ -117,7 +117,8 @@ MongoClient.connect(mongoURI)
             const id = req.params.id;
             var ObjectId = require('mongodb').ObjectId;
             const query = { _id: new ObjectId(req.params.id) };
-            const updatedStudent = req.body;
+            const updatedStudent = { ...req.body };
+            delete updatedStudent.timestamp;
             studentsCollection.updateOne(query, { $set: updatedStudent })
                 .then(result => {
                     console.log(result);
