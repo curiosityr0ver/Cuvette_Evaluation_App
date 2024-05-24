@@ -2,10 +2,9 @@ import axios from 'axios';
 
 const ENV = import.meta.env.VITE_APP_ENV || 'production';
 const SERVER_URL =
-    '';
-// ENV === 'production'
-//     ? import.meta.env.VITE_APP_SERVER_URL
-//     : 'http://localhost:5000';
+    ENV === 'production'
+        ? import.meta.env.VITE_APP_SERVER_URL
+        : 'http://localhost:5000';
 
 
 
