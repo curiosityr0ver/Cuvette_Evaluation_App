@@ -17,7 +17,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const mongoURI = 'mongodb+srv://mehtaishu14:PAMzLaYX0KPpclJJ@cluster0.rjde1cd.mongodb.net/?retryWrites=true&w=majority';
+const mongoURI = process.env.MONGO_URI;
 
 MongoClient.connect(mongoURI)
     .then(client => {
