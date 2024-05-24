@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
 const path = require('path');
 const { loginUser, authenticateUser } = require('./controllers/userController');
 const { getAllStudents, getStudentById, handleNewStudent, handleStudentUpdate, handleDeleteStudent } = require('./controllers/studentController');
@@ -13,9 +12,6 @@ require('dotenv').config(); // will config the .env file present in the director
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 5000;
-const PIN_1 = process.env.PIN_1;
-const PIN_2 = process.env.PIN_2;
-const SECRET_KEY = process.env.SECRET_KEY;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
