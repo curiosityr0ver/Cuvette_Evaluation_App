@@ -1,12 +1,30 @@
-const loginUser = (usersCollection) => (req, res) => {
-    const { pin } = req.body;
-    const newUser = { ...req.body, timestamp: new Date() };
+const { authors } = require("../data/authors");
+const { generateToken } = require("../middleware/auth");
 
-    usersCollection.insertOne(newUser)
-        .then(result => res.json({ message: 'Admin added successfully' }))
-        .catch(err => console.error(err));
+const loginUser = (PIN_1, PIN_2) => (req, res) => {
+    const authorArray = authors;
+    const { pin } = req.body;
+
+    // res.json({
+    //     message: 'User registered successfully',
+    //     PIN_1: PIN_1,
+    //     PIN_2: PIN_2,
+    //     authors: authorArray
+    // });
+
+    authors.forEach(author => {
+        if (author.pin == pin) {
+            const token = generateToken(author);
+            return res.json({
+                message: 'User registered successfully',
+                token: token,
+            });
+        }
+    });
+
 };
-const authenticateUser = () => (req, res) => {
+
+const authenticateUser = (PIN_1, PIN_2) => (req, res) => {
     const { pin } = req.body;
     let user;
 
@@ -32,5 +50,5 @@ const authenticateUser = () => (req, res) => {
 
 module.exports = {
     loginUser,
-    authenticateUser,
+    authenticateUser
 };

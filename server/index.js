@@ -3,9 +3,9 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const verifyToken = require('./middleware/auth');
 const { loginUser, authenticateUser } = require('./controllers/userController');
 const { getAllStudents, getStudentById, handleNewStudent, handleStudentUpdate, handleDeleteStudent } = require('./controllers/studentController');
+const { generateToken, validateToken } = require('./middleware/auth');
 require('dotenv').config(); // will config the .env file present in the directory
 
 
@@ -33,9 +33,10 @@ MongoClient.connect(mongoURI)
         });
 
         // Authentication route
-        app.post('/user/login', authenticateUser());
+        app.post('/user/login', loginUser(PIN_1, PIN_2, SECRET_KEY));
 
         app.post('/user/register', loginUser(usersCollection));
+
 
         // CRUD operations for students
         app.get('/student', getAllStudents(studentsCollection));
@@ -60,18 +61,4 @@ MongoClient.connect(mongoURI)
     .catch(err => console.error(err));
 
 
-const generateToken = (user) => {
-    console.log(user);
-    return jwt.sign(user, process.env.SECRET_KEY);
-};
 
-const validateToken = async (token, tokenSecret) => {
-    // returns user info, if the jwt token is valid
-    return await jwt.verify(token, tokenSecret,
-        (error, payload) => {
-            if (error) {
-                throw (error);
-            }
-            req.user = decoded;
-        });
-};
