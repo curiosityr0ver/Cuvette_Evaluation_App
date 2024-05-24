@@ -4,6 +4,8 @@ const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('./middleware/auth');
+const { loginUser, authenticateUser } = require('./controllers/userController');
+const { getAllStudents, getStudentById, handleNewStudent, handleStudentUpdate, handleDeleteStudent } = require('./controllers/studentController');
 require('dotenv').config(); // will config the .env file present in the directory
 
 
@@ -31,108 +33,22 @@ MongoClient.connect(mongoURI)
         });
 
         // Authentication route
-        app.post('/user/login', (req, res) => {
-            const { pin } = req.body;
-            let user;
-            if (pin == PIN_1) {
-                user = {
-                    author: "Ishu Mehta",
-                };
-                const token = generateToken(user);
-                return res.json({
-                    message: 'Authentication successful',
-                    token: token,
-                    author: user.author
-                });
-            } else if (pin == PIN_2) {
-                user = {
-                    author: "Kumar Shubhranshu"
-                };
-                const token = generateToken(user);
-                return res.json({
-                    message: 'Authentication successful',
-                    token: token,
-                    author: user.author
-                });
-            }
-            return res.json({
-                message: 'Authentication failed',
-            });
-        });
+        app.post('/user/login', authenticateUser());
 
-        app.post('/user/register', (req, res) => {
-            const { pin } = req.body;
-            const newUser = req.body;
-            newUser.timestamp = new Date();
-
-            usersCollection.insertOne(newUser)
-                .then(result => res.json({ message: 'Admin added successfully' }))
-                .catch(err => console.error(err));
-        });
+        app.post('/user/register', loginUser(usersCollection));
 
         // CRUD operations for students
-        app.get('/student', (req, res) => {
-            // Implement your logic to retrieve all students
-            studentsCollection.find({}).toArray()
-                .then(students => res.json(students))
-                .catch(err => console.error(err));
-        });
+        app.get('/student', getAllStudents(studentsCollection));
 
-        app.get('/student/:id', (req, res) => {
-            const id = req.params.id;
-            studentsCollection.find({}).toArray()
-                .then(students => {
-                    const student = students.find(student => student._id == id);
-                    student
-                        ? res.status(200).json(student)
-                        : res.status(404).json({ message: 'Student not found' });
-                })
-                .catch(err => console.error(err));
-        });
+        app.get('/student/:id', getStudentById(studentsCollection));
 
         app.post('/student',
             // verifyToken,
-            (req, res) => {
-                try {
-                    const newStudent = {
-                        ...req.body,
-                        timestamp: new Date(),
-                        author: req.author,
-                    };
-                    console.log(newStudent);
-                    studentsCollection.insertOne(newStudent)
-                        .then(result => {
-                            studentsCollection.find({}).toArray()
-                                .then(students => res.status(201).json({ message: 'Student added successfully', students }))
-                                .catch(err => console.error(err));
-                        })
-                        .catch(err => console.error(err));
-                } catch (error) {
-                    console.log(error);
-                    res.status(401).json({ message: 'Invalid Authorization' });
-                }
-            });
+            handleNewStudent(studentsCollection));
 
-        app.put('/student/:id', (req, res) => {
-            const id = req.params.id;
-            var ObjectId = require('mongodb').ObjectId;
-            const query = { _id: new ObjectId(req.params.id) };
-            const updatedStudent = { ...req.body };
-            delete updatedStudent.timestamp;
-            studentsCollection.updateOne(query, { $set: updatedStudent })
-                .then(result => {
-                    console.log(result);
-                    res.json({ message: 'Student updated successfully' });
-                })
-                .catch(err => console.error(err));
-        });
+        app.put('/student/:id', handleStudentUpdate(studentsCollection));
 
-        app.delete('/student/:id', (req, res) => {
-            const id = req.params.id;
-            studentsCollection.deleteOne({ _id: id })
-                .then(result => res.json({ message: 'Student deleted successfully' }))
-                .catch(err => console.error(err));
-        });
+        app.delete('/student/:id', handleDeleteStudent(studentsCollection));
 
         // Serve static files (for single-page app)
         app.use(express.static('public'));
