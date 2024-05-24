@@ -25,10 +25,10 @@ MongoClient.connect(mongoURI)
         const usersCollection = db.collection('users');
         const studentsCollection = db.collection('students');
 
-        app.use(express.static(path.join(__dirname, 'build')));
 
         app.get('/', (req, res) => {
-            res.sendFile(path.join(__dirname, 'build', 'index.html'));
+            res.json({ message: 'Welcome to the Express MongoDB App' });
+
         });
 
         // Authentication route
