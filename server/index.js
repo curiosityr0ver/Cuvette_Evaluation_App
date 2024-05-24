@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 const { loginUser, authenticateUser } = require('./controllers/userController');
 const { getAllStudents, getStudentById, handleNewStudent, handleStudentUpdate, handleDeleteStudent } = require('./controllers/studentController');
 const { generateToken, validateToken } = require('./middleware/auth');
@@ -28,15 +29,14 @@ MongoClient.connect(mongoURI)
         const usersCollection = db.collection('users');
         const studentsCollection = db.collection('students');
 
+        app.use(express.static(path.join(__dirname, 'build')));
+
         app.get('/', (req, res) => {
-            res.status(200).json({ message: 'Hello, world!' });
+            res.sendFile(path.join(__dirname, 'build', 'index.html'));
         });
 
         // Authentication route
-        app.post('/user/login', loginUser(PIN_1, PIN_2, SECRET_KEY));
-
-        app.post('/user/register', loginUser(usersCollection));
-
+        app.post('/user/login', loginUser());
 
         // CRUD operations for students
         app.get('/student', getAllStudents(studentsCollection));
@@ -50,9 +50,6 @@ MongoClient.connect(mongoURI)
         app.put('/student/:id', handleStudentUpdate(studentsCollection));
 
         app.delete('/student/:id', handleDeleteStudent(studentsCollection));
-
-        // Serve static files (for single-page app)
-        app.use(express.static('public'));
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);

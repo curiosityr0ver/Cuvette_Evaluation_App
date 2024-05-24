@@ -34,22 +34,22 @@ function NavBar() {
 	};
 
 	const handleLogin = async () => {
+		const tempPin = pin || JSON.parse(localStorage.getItem("pin"));
+		if (!tempPin) return;
 		setLoading(true);
-		const { data } = await login(pin);
+		const { data } = await login(tempPin);
 		setLoading(false);
 		if (data.token) {
 			setAuth(data.token);
-			localStorage.setItem("author", data.author);
 			setcurrentUser(data.author);
+			localStorage.setItem("pin", JSON.stringify(tempPin));
 		} else {
+			console.log("Invalid PIN");
 			alert("Invalid PIN");
 		}
 	};
 	useEffect(() => {
-		const author = localStorage.getItem("author");
-		if (author) {
-			setcurrentUser(author);
-		}
+		handleLogin();
 	}, []);
 
 	return (
