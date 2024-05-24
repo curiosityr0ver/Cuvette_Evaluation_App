@@ -2,10 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const cors = require('cors');
-const path = require('path');
-const { loginUser, authenticateUser } = require('./controllers/userController');
+const { loginUser } = require('./controllers/userController');
 const { getAllStudents, getStudentById, handleNewStudent, handleStudentUpdate, handleDeleteStudent } = require('./controllers/studentController');
-const { generateToken, validateToken } = require('./middleware/auth');
 require('dotenv').config(); // will config the .env file present in the directory
 
 
