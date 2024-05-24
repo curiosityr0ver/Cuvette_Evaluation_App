@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const mongoURI = 'mongodb+srv://mehtaishu14:PAMzLaYX0KPpclJJ@cluster0.rjde1cd.mongodb.net/?retryWrites=true&w=majority';
-
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://mehtaishu14:PAMzLaYX0KPpclJJ@cluster0.rjde1cd.mongodb.net/?retryWrites=true&w=majority';
+console.log(mongoURI);
 MongoClient.connect(mongoURI)
     .then(client => {
         console.log('Connected to MongoDB');
@@ -26,7 +26,13 @@ MongoClient.connect(mongoURI)
 
         app.get('/', (req, res) => {
             res.json({ message: 'Welcome to the Express MongoDB App' });
+        });
 
+        app.get('/testing', (req, res) => {
+            res.json({
+                message: 'Shhhh...',
+                string: process.env.MONGODB_URI
+            });
         });
 
         // Authentication route
