@@ -12,8 +12,11 @@ const loginUser = () => (req, res) => {
         return res.json({
             message: 'User registered successfully',
             token: token,
+            author: author.name
         });
+
     }
+    return res.json({ message: 'Invalid PIN' });
 };
 
 module.exports = {
