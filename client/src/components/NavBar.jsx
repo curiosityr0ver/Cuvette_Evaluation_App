@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./NavBar.module.css";
 import { Button, Input } from "@chakra-ui/react";
-import { login } from "../../api/students";
+import { login } from "../api/students";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 

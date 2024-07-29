@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const getStudentById = (studentsCollection) => (req, res) => {
     const id = req.params.id;
     studentsCollection.find({}).toArray()
@@ -31,11 +33,14 @@ const handleStudentUpdate = (studentsCollection) => (req, res) => {
 };
 
 const handleNewStudent = (studentsCollection) => (req, res) => {
+
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
     try {
         const newStudent = {
             ...req.body,
+            author: decoded.name,
             timestamp: new Date(),
-            author: req.author,
         };
         studentsCollection.insertOne(newStudent)
             .then(result => {

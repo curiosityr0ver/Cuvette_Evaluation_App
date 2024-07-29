@@ -13,11 +13,11 @@ import {
 	NumberDecrementStepper,
 } from "@chakra-ui/react";
 import RemarkPicker from "../components/RemarkPicker";
-import { addStudent, updateStudent } from "../../api/students";
+import { addStudent, updateStudent } from "../api/students";
 import { UserContext } from "../context/UserContext";
 import { interviewOptions, statusOptions } from "../../data/options";
 import { communicationOptions } from "../../data/options";
-import { fetchStudent } from "../../api/students";
+import { fetchStudent } from "../api/students";
 import { useNavigate } from "react-router-dom";
 import { remarks } from "../../data/Remarks";
 import { parseOldStudent } from "../../data/parseOldStudent";

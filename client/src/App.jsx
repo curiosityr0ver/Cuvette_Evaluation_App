@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./dashboard/Dashboard";
 import AddStudent from "./pages/AddStudent";
 import { useEffect, useState, useContext } from "react";
-import { fetchStudents } from "../api/students";
+import { fetchStudents } from "./api/students";
 import { UserContext } from "./context/UserContext";
 
 function App() {
