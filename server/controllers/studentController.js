@@ -25,7 +25,6 @@ const handleStudentUpdate = (studentsCollection) => (req, res) => {
     delete updatedStudent.timestamp;
     studentsCollection.updateOne(query, { $set: updatedStudent })
         .then(result => {
-            console.log(result);
             res.json({ message: 'Student updated successfully' });
         })
         .catch(err => console.error(err));
@@ -38,7 +37,6 @@ const handleNewStudent = (studentsCollection) => (req, res) => {
             timestamp: new Date(),
             author: req.author,
         };
-        console.log(newStudent);
         studentsCollection.insertOne(newStudent)
             .then(result => {
                 studentsCollection.find({}).toArray()
@@ -47,15 +45,27 @@ const handleNewStudent = (studentsCollection) => (req, res) => {
             })
             .catch(err => console.error(err));
     } catch (error) {
-        console.log(error);
         res.status(401).json({ message: 'Invalid Authorization' });
     }
 };
 
 const getAllStudents = (studentsCollection) => (req, res) => {
-    studentsCollection.find({}).toArray()
-        .then(students => res.json(students))
-        .catch(err => console.error(err));
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    studentsCollection.find({
+        timestamp: {
+            $gte: thirtyDaysAgo
+        }
+    }).toArray()
+        .then(students => {
+            console.log(students);
+            return res.json(students);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('Internal Server Error');
+        });
 };
 
 module.exports = {

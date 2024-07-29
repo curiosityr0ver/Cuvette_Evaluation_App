@@ -15,7 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const mongoURI = 'mongodb+srv://mehtaishu14:PAMzLaYX0KPpclJJ@cluster0.rjde1cd.mongodb.net/?retryWrites=true&w=majority';
-console.log(process.env.MONGODB_URI);
 MongoClient.connect(mongoURI)
     .then(client => {
         console.log('Connected to MongoDB');
