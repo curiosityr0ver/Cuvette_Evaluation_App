@@ -11,6 +11,11 @@ const authors = [
         name: 'Kumar Shubhranshu',
         pin: process.env.PIN_2
     },
+    {
+        id: 3,
+        name: 'Adfar Rasheed',
+        pin: process.env.PIN_3
+    }
 ];
 
 module.exports = { authors };
