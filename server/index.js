@@ -43,7 +43,6 @@ MongoClient.connect(mongoURI)
         app.get('/student/:id', getStudentById(studentsCollection));
 
         app.post('/student',
-            // verifyToken,
             handleNewStudent(studentsCollection));
 
         app.put('/student/:id', handleStudentUpdate(studentsCollection));
