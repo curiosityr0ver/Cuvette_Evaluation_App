@@ -43,12 +43,16 @@ MongoClient.connect(mongoURI)
         app.get('/student/:id', getStudentById(studentsCollection));
 
         app.post('/student',
-            // verifyToken,
+            verifyToken,
             handleNewStudent(studentsCollection));
 
-        app.put('/student/:id', handleStudentUpdate(studentsCollection));
+        app.put('/student/:id',
+            verifyToken,
+            handleStudentUpdate(studentsCollection));
 
-        app.delete('/student/:id', handleDeleteStudent(studentsCollection));
+        app.delete('/student/:id',
+            verifyToken,
+            handleDeleteStudent(studentsCollection));
 
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
