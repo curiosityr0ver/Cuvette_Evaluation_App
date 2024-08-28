@@ -30,7 +30,7 @@ MongoClient.connect(mongoURI)
         app.get('/testing', (req, res) => {
             res.json({
                 message: 'Shhhh...',
-                string: process.env.MONGODB_URI
+                string: process.env.MONGO_URI
             });
         });
 
